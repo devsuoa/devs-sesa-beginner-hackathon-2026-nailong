@@ -1,0 +1,17 @@
+.link {
+  text-decoration: none;
+}
+
+.button {
+  background-color: #3B82F6;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 999px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #2563EB;
+}
