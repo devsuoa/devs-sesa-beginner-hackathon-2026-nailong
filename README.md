@@ -1,4 +1,4 @@
-# DEVS x SESA Beginner Hackathon 2026
+# DEVS x SESA Beginner Hackathon 2026 😊
 
 <p align="center">
   <img width="450" alt="header" src="public/read-me-header.png" />
