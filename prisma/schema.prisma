@@ -10,6 +10,185 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────
+// PROFILES
+// Extends Supabase auth.users
+// Role determines which side of the app they see
+// ─────────────────────────────────────────
+
+model Profile {
+  id        String   @id @default(uuid())
+  role      Role     @default(RIDER)  
+  email     String   @unique
+  firstName String
+  lastName  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rider  RiderProfile?
+  driver DriverProfile?
+
+
+  @@map("profiles")
+}
+
+model RiderProfile {
+  id             String   @id @default(uuid())
+  profileId      String   @unique
+  homeLocationId String?  @db.Uuid
+  totalTrips     Int      @default(0)
+  createdAt      DateTime @default(now())
+
+  profile      Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  homeLocation Location?  @relation(fields: [homeLocationId], references: [id])
+  bookings     Booking[]
+
+  @@map("rider_profiles")
+}
+
+model DriverProfile {
+  id          String          @id @default(uuid())
+  profileId   String          @unique
+  vesselName  String          // "ISS Falcon-9B"
+  vesselType  VesselType
+  status      DriverStatus    @default(OFFLINE)
+  rating      Float           @default(5.0)
+  totalTrips  Int             @default(0)
+  createdAt   DateTime        @default(now())
+
+  profile  Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+  earnings Earning[]
+
+  @@map("driver_profiles")
+}
+
+// ─────────────────────────────────────────
+// LOCATIONS
+// Space stations, colonies, outposts
+// ─────────────────────────────────────────
+
+model Location {
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String       // "Station Kepler-7"
+  type              LocationType
+  description       String?
+  currentConditions String?      // "dust storm", "clear", "solar flare warning"
+  travelTimes       Json         @default("{}") // { "<locationId>": minutesInt }
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+
+  riderHomeLocations  RiderProfile[]
+  originBookings      Booking[]    @relation("OriginBookings")
+  destinationBookings Booking[]    @relation("DestinationBookings")
+
+  @@map("locations")
+}
+
+// ─────────────────────────────────────────
+// BOOKINGS
+// Core table — one row per trip/delivery request
+// Mirrors an Uber trip request
+// ─────────────────────────────────────────
+
+model Booking {
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  riderId          String
+  driverId         String?
+  originId         String        @db.Uuid
+  destinationId    String        @db.Uuid
+  serviceType      ServiceType
+  status           BookingStatus @default(PENDING)
+  priceCredits     Int
+  departureTime    DateTime?
+  estimatedArrival DateTime?
+  actualArrival    DateTime?
+  aiBriefing       String?       // Claude-generated travel briefing
+  cancelReason     String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  rider       RiderProfile   @relation(fields: [riderId], references: [id])
+  driver      DriverProfile? @relation(fields: [driverId], references: [id])
+  origin      Location       @relation("OriginBookings", fields: [originId], references: [id])
+  destination Location       @relation("DestinationBookings", fields: [destinationId], references: [id])
+  earning     Earning?
+
+  @@map("bookings")
+}
+
+// ─────────────────────────────────────────
+// EARNINGS
+// One row per completed booking, on the driver side
+// Mirrors Uber's earnings/trips ledger
+// ─────────────────────────────────────────
+
+model Earning {
+  id            String   @id @default(uuid())
+  driverId      String
+  bookingId     String   @unique @db.Uuid
+  grossCredits  Int      // full fare
+  platformFee   Int      // OrbitX cut (e.g. 25%)
+  netCredits    Int      // what driver actually gets
+  createdAt     DateTime @default(now())
+
+  driver  DriverProfile @relation(fields: [driverId], references: [id])
+  booking Booking       @relation(fields: [bookingId], references: [id])
+
+  @@map("earnings")
+}
+
+// ─────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────
+
+enum Role {
+  RIDER
+  DRIVER
+
+  @@map("role")
+}
+
+enum DriverStatus {
+  OFFLINE
+  ONLINE
+  ON_TRIP
+
+  @@map("driver_status")
+}
+
+enum VesselType {
+  SHUTTLE       // passenger transport
+  FREIGHTER     // cargo
+  COURIER       // food/small deliveries
+
+  @@map("vessel_type")
+}
+
+enum LocationType {
+  STATION
+  COLONY
+  OUTPOST
+
+  @@map("location_type")
+}
+
+enum ServiceType {
+  SHUTTLE
+  CARGO
+  FOOD
+
+  @@map("service_type")
+}
+
+enum BookingStatus {
+  PENDING       // just created, awaiting driver
+  CONFIRMED     // driver accepted
+  IN_TRANSIT    // en route
+  DELIVERED     // completed
+  CANCELLED     // cancelled by either party
+
+  @@map("booking_status")
 }
