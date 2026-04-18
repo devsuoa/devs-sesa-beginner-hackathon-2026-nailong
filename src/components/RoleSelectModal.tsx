@@ -161,10 +161,10 @@ function RoleCard({
       {/* Corner pips when selected */}
       {selected && (
         <>
-          <span className="absolute top-[-1px] left-[6px] w-1 h-1 bg-white shadow-[0_0_6px_white]" />
-          <span className="absolute top-[-1px] right-[6px] w-1 h-1 bg-white shadow-[0_0_6px_white]" />
-          <span className="absolute bottom-[-1px] left-[6px] w-1 h-1 bg-white shadow-[0_0_6px_white]" />
-          <span className="absolute bottom-[-1px] right-[6px] w-1 h-1 bg-white shadow-[0_0_6px_white]" />
+          <span className="absolute -top-px left-1.5 w-1 h-1 bg-white shadow-[0_0_6px_white]" />
+          <span className="absolute -top-px right-1.5 w-1 h-1 bg-white shadow-[0_0_6px_white]" />
+          <span className="absolute -bottom-px left-1.5 w-1 h-1 bg-white shadow-[0_0_6px_white]" />
+          <span className="absolute -bottom-px right-1.5 w-1 h-1 bg-white shadow-[0_0_6px_white]" />
         </>
       )}
 
