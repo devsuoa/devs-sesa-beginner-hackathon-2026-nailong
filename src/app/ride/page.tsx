@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Starfield from "@/components/Starfield";
 import NailongPlanet from "@/components/NailongPlanet";
+import ShuttleOptions from "@/components/Shuttles";
 
 const PLANETS = [
   "Mars 🔴",
@@ -83,6 +84,9 @@ export default function Ride() {
         <span className="corner-pip corner-pip--bl" />
         <span className="corner-pip corner-pip--br" />
       </div>
+
+      {/* SHUTTLE OPTIONS */}
+      <ShuttleOptions />
 
       {/* SUBMIT */}
       <button
