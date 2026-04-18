@@ -158,6 +158,7 @@ export default function Ride() {
       {/* SUBMIT BUTTON */}
       <button
         onClick={handleConfirm}
+        type="button"
         className="relative w-full h-14 flex items-center justify-center
         text-white tracking-[0.25em] text-sm font-semibold
         border border-white/20 bg-black/40 backdrop-blur-md

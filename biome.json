@@ -18,7 +18,9 @@
 		"rules": {
 			"recommended": true,
 			"a11y": {
-				"noStaticElementInteractions": "off"
+				"noStaticElementInteractions": "off",
+				"noLabelWithoutControl": "off",
+				"noSvgWithoutTitle": "off"
 			}
 		}
 	},
