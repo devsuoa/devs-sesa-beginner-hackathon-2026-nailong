@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Starfield from "@/components/Starfield";
-import NailongPlanet from "@/components/NailongPlanet";
 import ShuttleOptions from "@/components/ShuttleOptions";
 
 const PLANETS = [
@@ -52,9 +50,6 @@ export default function Ride() {
 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col gap-8">
-      <Starfield />
-      <NailongPlanet />
-
       {/* TITLE */}
       <h1
         className="text-center text-3xl font-black tracking-[0.2em] text-white mb-2 mt-8"

@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Starfield from "@/components/Starfield";
 import { Suspense } from "react";
 
 // Distance matrix between planets
@@ -48,8 +47,7 @@ function ConfirmRideContent() {
 
   return (
     <div className="min-h-screen relative">
-      <Starfield />
-      
+     
       <div className="w-full max-w-2xl mx-auto px-4 py-8 relative z-10">
         <h1 className="text-center text-4xl font-black tracking-[0.2em] text-white mb-8"
           style={{ textShadow: "0 0 20px rgba(255,255,255,0.7)" }}>
@@ -151,7 +149,7 @@ function ConfirmRideContent() {
           <Link href="/ride/payment" className="flex-1">
             <button className="relative w-full h-12 flex items-center justify-center
               text-white tracking-[0.2em] text-sm font-semibold
-              border border-white/40 bg-gradient-to-r from-cyan-500/20 to-blue-500/20
+              border border-white/40 bg-linear-to-r from-cyan-500/20 to-blue-500/20
               transition-all duration-300
               hover:border-white/80 hover:shadow-[0_0_25px_rgba(0,255,255,0.4)]
               active:scale-95">
