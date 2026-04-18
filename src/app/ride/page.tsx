@@ -9,7 +9,9 @@ const PLANETS = [
   "Venus 🟠",
   "Jupiter 🪐",
   "Saturn 💫",
-  "Neon Station ✨",
+  "Uranus 🌀",
+  "Neptune 🌊",
+  "Mercury ☀️",
 ];
 
 export default function Ride() {
