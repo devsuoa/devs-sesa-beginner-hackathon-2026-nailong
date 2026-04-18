@@ -12,17 +12,6 @@ type Job = {
   distance?: string;
 };
 
-function CornerCut({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div
-      className={className}
-      style={{ clipPath: "polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))" }}
-    >
-      {children}
-    </div>
-  );
-}
-
 function PulseDot() {
   return (
     <span
@@ -45,8 +34,11 @@ function Toast({ message, visible }: { message: string; visible: boolean }) {
         background: "rgba(0,0,0,0.9)",
         border: "1px solid rgba(100,255,180,0.3)",
         color: "rgba(100,255,180,0.9)",
-        clipPath: "polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%)",
-        transform: visible ? "translateX(-50%) translateY(0)" : "translateX(-50%) translateY(20px)",
+        clipPath:
+          "polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%)",
+        transform: visible
+          ? "translateX(-50%) translateY(0)"
+          : "translateX(-50%) translateY(20px)",
         opacity: visible ? 1 : 0,
       }}
     >
@@ -57,11 +49,17 @@ function Toast({ message, visible }: { message: string; visible: boolean }) {
 
 function ServiceBadge({ type }: { type: string }) {
   const styles: Record<string, { border: string; color: string }> = {
-    SHUTTLE: { border: "rgba(100,180,255,0.2)", color: "rgba(100,180,255,0.7)" },
-    CARGO:   { border: "rgba(255,180,100,0.2)", color: "rgba(255,180,100,0.7)" },
-    VIP:     { border: "rgba(200,100,255,0.2)", color: "rgba(200,100,255,0.7)" },
+    SHUTTLE: {
+      border: "rgba(100,180,255,0.2)",
+      color: "rgba(100,180,255,0.7)",
+    },
+    CARGO: { border: "rgba(255,180,100,0.2)", color: "rgba(255,180,100,0.7)" },
+    VIP: { border: "rgba(200,100,255,0.2)", color: "rgba(200,100,255,0.7)" },
   };
-  const s = styles[type] ?? { border: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.4)" };
+  const s = styles[type] ?? {
+    border: "rgba(255,255,255,0.12)",
+    color: "rgba(255,255,255,0.4)",
+  };
 
   return (
     <span
@@ -77,7 +75,13 @@ function ServiceBadge({ type }: { type: string }) {
   );
 }
 
-function JobCard({ job, onAccept }: { job: Job; onAccept: (id: string) => void }) {
+function JobCard({
+  job,
+  onAccept,
+}: {
+  job: Job;
+  onAccept: (id: string) => void;
+}) {
   const [accepting, setAccepting] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
@@ -93,20 +97,25 @@ function JobCard({ job, onAccept }: { job: Job; onAccept: (id: string) => void }
       style={{
         borderColor: leaving ? "transparent" : "rgba(255,255,255,0.08)",
         background: leaving ? "transparent" : "rgba(255,255,255,0.02)",
-        clipPath: "polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))",
+        clipPath:
+          "polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))",
         opacity: leaving ? 0 : 1,
         transform: leaving ? "translateX(12px)" : "translateX(0)",
       }}
-      onMouseEnter={e => {
+      onMouseEnter={(e) => {
         if (!leaving) {
-          (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.2)";
-          (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.04)";
+          (e.currentTarget as HTMLDivElement).style.borderColor =
+            "rgba(255,255,255,0.2)";
+          (e.currentTarget as HTMLDivElement).style.background =
+            "rgba(255,255,255,0.04)";
         }
       }}
-      onMouseLeave={e => {
+      onMouseLeave={(e) => {
         if (!leaving) {
-          (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
-          (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.02)";
+          (e.currentTarget as HTMLDivElement).style.borderColor =
+            "rgba(255,255,255,0.08)";
+          (e.currentTarget as HTMLDivElement).style.background =
+            "rgba(255,255,255,0.02)";
         }
       }}
     >
@@ -139,7 +148,9 @@ function JobCard({ job, onAccept }: { job: Job; onAccept: (id: string) => void }
           >
             {job.payout}
           </span>
-          <span className="text-[8px] tracking-[0.2em] text-white/30">CREDITS</span>
+          <span className="text-[8px] tracking-[0.2em] text-white/30">
+            CREDITS
+          </span>
         </div>
       </div>
 
@@ -148,7 +159,9 @@ function JobCard({ job, onAccept }: { job: Job; onAccept: (id: string) => void }
         <div className="flex items-center gap-2.5">
           <ServiceBadge type={job.serviceType} />
           {job.distance && (
-            <span className="text-[8px] tracking-[0.15em] text-white/25">{job.distance}</span>
+            <span className="text-[8px] tracking-[0.15em] text-white/25">
+              {job.distance}
+            </span>
           )}
         </div>
 
@@ -159,14 +172,15 @@ function JobCard({ job, onAccept }: { job: Job; onAccept: (id: string) => void }
           className="relative px-5 py-1.5 text-[9px] font-black tracking-[0.2em] text-white border-none bg-transparent cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           style={{
             fontFamily: "'Orbitron', monospace",
-            clipPath: "polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%)",
+            clipPath:
+              "polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%)",
             textShadow: "0 0 8px rgba(255,255,255,0.6)",
           }}
-          onMouseEnter={e => {
+          onMouseEnter={(e) => {
             const el = e.currentTarget as HTMLButtonElement;
             el.style.textShadow = "0 0 14px rgba(255,255,255,1)";
           }}
-          onMouseLeave={e => {
+          onMouseLeave={(e) => {
             const el = e.currentTarget as HTMLButtonElement;
             el.style.textShadow = "0 0 8px rgba(255,255,255,0.6)";
           }}
@@ -187,7 +201,15 @@ function JobCard({ job, onAccept }: { job: Job; onAccept: (id: string) => void }
   );
 }
 
-function ToggleButton({ online, onToggle, loading }: { online: boolean; onToggle: () => void; loading: boolean }) {
+function ToggleButton({
+  online,
+  onToggle,
+  loading,
+}: {
+  online: boolean;
+  onToggle: () => void;
+  loading: boolean;
+}) {
   return (
     <div className="flex flex-col items-center gap-5">
       <button
@@ -205,7 +227,10 @@ function ToggleButton({ online, onToggle, loading }: { online: boolean; onToggle
             style={{
               inset,
               border: `1px solid ${online ? "rgba(100,255,180,0.25)" : "rgba(255,255,255,0.1)"}`,
-              boxShadow: online && inset === 0 ? "0 0 30px rgba(100,255,180,0.08)" : "none",
+              boxShadow:
+                online && inset === 0
+                  ? "0 0 30px rgba(100,255,180,0.08)"
+                  : "none",
             }}
           />
         ))}
@@ -215,7 +240,9 @@ function ToggleButton({ online, onToggle, loading }: { online: boolean; onToggle
           className="absolute rounded-full flex flex-col items-center justify-center gap-1 transition-all duration-500"
           style={{
             inset: 36,
-            background: online ? "rgba(100,255,180,0.06)" : "rgba(255,255,255,0.04)",
+            background: online
+              ? "rgba(100,255,180,0.06)"
+              : "rgba(255,255,255,0.04)",
             border: `1px solid ${online ? "rgba(100,255,180,0.4)" : "rgba(255,255,255,0.15)"}`,
             boxShadow: online ? "0 0 20px rgba(100,255,180,0.1) inset" : "none",
           }}
@@ -230,7 +257,9 @@ function ToggleButton({ online, onToggle, loading }: { online: boolean; onToggle
             strokeLinecap="round"
             style={{
               color: online ? "rgba(100,255,180,0.9)" : "rgba(255,255,255,0.3)",
-              filter: online ? "drop-shadow(0 0 6px rgba(100,255,180,0.8))" : "none",
+              filter: online
+                ? "drop-shadow(0 0 6px rgba(100,255,180,0.8))"
+                : "none",
               transition: "all 0.4s",
             }}
           >
@@ -274,7 +303,7 @@ export default function DrivePage() {
     setLoadingJobs(true);
     try {
       const res = await fetch("/api/bookings/available");
-      const data = await res.json();
+      const data = (await res.json()).bookings;
       setJobs(data);
     } catch (err) {
       console.error("Failed to fetch jobs:", err);
@@ -328,104 +357,120 @@ export default function DrivePage() {
     return () => clearInterval(interval);
   }, [online, fetchJobs]);
 
-  if (profile?.role !== "DRIVER") {
+  if (!profile?.roles.includes("DRIVER")) {
     return (
       <div className="mt-32 relative z-5 max-w-3xl mx-auto px-8 py-10">
         <p
           className="text-96 tracking-[0.4em] text-white/25 uppercase mb-2 text-center"
           style={{ fontFamily: "'Share Tech Mono', monospace" }}
         >
-          // access denied
+          {"// access denied"}
         </p>
-    </div>
-    );  
-  } else return <>
-      <div className="mt-32 relative z-5 max-w-3xl mx-auto px-8 py-10">
-        {/* Header */}
-        <p
-          className="text-[9px] tracking-[0.4em] text-white/25 uppercase mb-2 text-center"
-          style={{ fontFamily: "'Share Tech Mono', monospace" }}
-        >
-          // driver console
-        </p>
-        <h1
-          className="text-2xl font-black tracking-[0.12em] text-white mb-1 text-center"
-          style={{
-            fontFamily: "'Orbitron', monospace",
-            textShadow: "0 0 20px rgba(255,255,255,0.5)",
-          }}
-        >
-          MISSION CONTROL
-        </h1>
-        <p
-          className="text-[10px] tracking-[0.2em] text-white/30 mb-12 text-center"
-          style={{ fontFamily: "'Share Tech Mono', monospace" }}
-        >
-          WELCOME BACK,{" "}
-          {profile?.firstName?.toUpperCase() ?? "PILOT"}
-        </p>
+      </div>
+    );
+  } else
+    return (
+      <>
+        <div className="mt-32 relative z-5 max-w-3xl mx-auto px-8 py-10">
+          {/* Header */}
+          <p
+            className="text-[9px] tracking-[0.4em] text-white/25 uppercase mb-2 text-center"
+            style={{ fontFamily: "'Share Tech Mono', monospace" }}
+          >
+            {"// console"}
+          </p>
+          <h1
+            className="text-2xl font-black tracking-[0.12em] text-white mb-1 text-center"
+            style={{
+              fontFamily: "'Orbitron', monospace",
+              textShadow: "0 0 20px rgba(255,255,255,0.5)",
+            }}
+          >
+            DRIVER DASHBOARD
+          </h1>
+          <p
+            className="text-[10px] tracking-[0.2em] text-white/30 mb-12 text-center"
+            style={{ fontFamily: "'Share Tech Mono', monospace" }}
+          >
+            WELCOME BACK, {profile?.firstName?.toUpperCase() || "PILOT"}
+          </p>
 
-        {/* Toggle */}
-        <div className="flex justify-center mb-12">
-          <ToggleButton online={online} onToggle={handleToggle} loading={toggling} />
+          {/* Toggle */}
+          <div className="flex justify-center mb-12">
+            <ToggleButton
+              online={online}
+              onToggle={handleToggle}
+              loading={toggling}
+            />
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-white/6 mb-8" />
+
+          {/* Job feed */}
+          {online ? (
+            loadingJobs ? (
+              <div
+                className="text-center text-[9px] tracking-[0.3em] text-white/25 py-12"
+                style={{ fontFamily: "'Share Tech Mono', monospace" }}
+              >
+                SCANNING FOR JOBS...
+              </div>
+            ) : jobs.length === 0 ? (
+              <div
+                className="text-center text-[9px] tracking-[0.3em] text-white/20 py-12"
+                style={{ fontFamily: "'Share Tech Mono', monospace" }}
+              >
+                NO JOBS AVAILABLE — STANDING BY
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-5">
+                  <span
+                    className="text-[11px] font-bold tracking-[0.2em] text-white/60"
+                    style={{ fontFamily: "'Orbitron', monospace" }}
+                  >
+                    <PulseDot />
+                    LIVE JOBS
+                  </span>
+                  <span
+                    className="text-[9px] tracking-[0.2em] text-white/25"
+                    style={{ fontFamily: "'Share Tech Mono', monospace" }}
+                  >
+                    {jobs.length} AVAILABLE
+                  </span>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {jobs.map((job) => (
+                    <JobCard key={job.id} job={job} onAccept={handleAccept} />
+                  ))}
+                </div>
+              </>
+            )
+          ) : (
+            <div className="flex flex-col items-center justify-center py-16 gap-3 opacity-40">
+              <div
+                className="text-5xl"
+                style={{
+                  fontFamily: "'Orbitron', monospace",
+                  color: "rgba(255,255,255,0.15)",
+                }}
+              >
+                ◎
+              </div>
+              <p
+                className="text-[10px] tracking-[0.25em] text-white/20 text-center"
+                style={{ fontFamily: "'Share Tech Mono', monospace" }}
+              >
+                GO ONLINE TO SEE
+                <br />
+                AVAILABLE JOBS
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-white/6 mb-8" />
-
-        {/* Job feed */}
-        {online ? (
-          loadingJobs ? (
-            <div
-              className="text-center text-[9px] tracking-[0.3em] text-white/25 py-12"
-              style={{ fontFamily: "'Share Tech Mono', monospace" }}
-            >
-              SCANNING FOR JOBS...
-            </div>
-          ) : jobs.length === 0 ? (
-            <div
-              className="text-center text-[9px] tracking-[0.3em] text-white/20 py-12"
-              style={{ fontFamily: "'Share Tech Mono', monospace" }}
-            >
-              NO JOBS AVAILABLE — STANDING BY
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center justify-between mb-5">
-                <span
-                  className="text-[11px] font-bold tracking-[0.2em] text-white/60"
-                  style={{ fontFamily: "'Orbitron', monospace" }}
-                >
-                  <PulseDot />
-                  LIVE JOBS
-                </span>
-                <span
-                  className="text-[9px] tracking-[0.2em] text-white/25"
-                  style={{ fontFamily: "'Share Tech Mono', monospace" }}
-                >
-                  {jobs.length} AVAILABLE
-                </span>
-              </div>
-              <div className="flex flex-col gap-3">
-                {jobs.map((job) => (
-                  <JobCard key={job.id} job={job} onAccept={handleAccept} />
-                ))}
-              </div>
-            </>
-          )
-        ) : (
-          <div className="flex flex-col items-center justify-center py-16 gap-3 opacity-40">
-            <div className="text-5xl" style={{ fontFamily: "'Orbitron', monospace", color: "rgba(255,255,255,0.15)" }}>◎</div>
-            <p
-              className="text-[10px] tracking-[0.25em] text-white/20 text-center"
-              style={{ fontFamily: "'Share Tech Mono', monospace" }}
-            >
-              GO ONLINE TO SEE<br />AVAILABLE JOBS
-            </p>
-          </div>
-        )}
-      </div>
-
-      <Toast message="JOB ACCEPTED — STAND BY" visible={toast} />
-    </>
+        <Toast message="JOB ACCEPTED — STAND BY" visible={toast} />
+      </>
+    );
 }

@@ -20,7 +20,7 @@ datasource db {
 
 model Profile {
   id        String   @id @default(uuid())
-  role      Role? 
+  roles     Role[]   @default([])
   email     String   @unique
   firstName String
   lastName  String?

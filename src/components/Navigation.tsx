@@ -89,7 +89,7 @@ export default function Navigation() {
       <nav className="fixed top-0 left-0 w-full z-10 flex items-center justify-between px-8 h-16 border-b border-white/8 bg-black/60 backdrop-blur-xl">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 no-underline">
-          <Image src="/favicon.png" alt="Nailong Express Logo" width={64} height={64} />
+          <Image src="/favicon.png" alt="NaiX Logo" width={64} height={64} />
           <div>
             <span
               className="font-black text-lg tracking-[0.12em] text-white"
@@ -99,13 +99,7 @@ export default function Navigation() {
                   "0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4)",
               }}
             >
-              NAILONG EXPRESS
-            </span>
-            <span
-              className="block text-[10px] tracking-[0.3em] text-white/45 font-normal -mt-0.5"
-              style={{ fontFamily: "'Share Tech Mono', monospace" }}
-            >
-              YOUR ORBIT. YOUR RIDE.
+              NAIX
             </span>
           </div>
         </Link>

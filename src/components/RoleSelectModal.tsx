@@ -28,10 +28,10 @@ export default function RoleSelectModal({ onSelect }: RoleSelectModalProps) {
         }}
       >
         {/* Corner accents */}
-        <span className="absolute top-0 left-0 w-4 h-[1px] bg-white/60" />
-        <span className="absolute top-0 left-0 w-[1px] h-4 bg-white/60" />
-        <span className="absolute bottom-0 right-0 w-4 h-[1px] bg-white/60" />
-        <span className="absolute bottom-0 right-0 w-[1px] h-4 bg-white/60" />
+        <span className="absolute top-0 left-0 w-4 h-px bg-white/60" />
+        <span className="absolute top-0 left-0 w-px h-4 bg-white/60" />
+        <span className="absolute bottom-0 right-0 w-4 h-px bg-white/60" />
+        <span className="absolute bottom-0 right-0 w-px h-4 bg-white/60" />
 
         {/* Header */}
         <p

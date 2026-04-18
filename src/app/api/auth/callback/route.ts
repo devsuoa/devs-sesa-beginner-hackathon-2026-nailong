@@ -5,7 +5,6 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(req: NextRequest) {
 	const { searchParams, origin } = new URL(req.url);
 	const code = searchParams.get("code");
-	const role = (searchParams.get("role") ?? "rider") as "rider" | "driver";
 
 	if (!code) {
 		return NextResponse.redirect(`${origin}/auth?error=missing_code`);
@@ -29,7 +28,7 @@ export async function GET(req: NextRequest) {
 				data: {
 					id: session.user.id,
 					email: session.user.email ?? "",
-					role: role === "driver" ? "DRIVER" : "RIDER",
+					roles: [],
 					firstName: session.user.user_metadata?.first_name ?? "",
 					lastName: session.user.user_metadata?.last_name ?? null
 				},

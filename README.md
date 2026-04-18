@@ -1,6 +1,6 @@
 # Team Nailong: SESA x DEVS 2026 Hackathon
 
-## Nailong Express
+## NaiX
 
 With this hackathon's theme being "Out of this world", we have decided to present our own solution for humanity, set in the near future. In this near future, humanity no longer resides on earth, but among the moon and neighbouring planets in our solar system. Humanity is only beginning to settle to this new environment, and transportation is scarce and unaffordable. To solve this, we have created NailongExpress, based off Uber - but for space. This will be government funded, with space ships for transportation being provided by them.
 
