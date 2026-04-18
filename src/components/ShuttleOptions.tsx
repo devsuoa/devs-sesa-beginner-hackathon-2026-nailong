@@ -84,8 +84,6 @@ export default function ShuttleOptions({
                     fill
                     className="object-contain p-3 scale-220"
                     sizes="(max-width: 220px) 100vw, 220px"
-                    width={64}
-                    height={64}
                   />
                 </div>
                 <div className="p-3 text-center">
