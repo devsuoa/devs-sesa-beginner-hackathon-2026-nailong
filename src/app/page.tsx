@@ -17,7 +17,7 @@ export default function Home() {
             alt="Landing Planet"
             width={400}
             height={400}
-            className="object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.4)] animate-[float_6s_ease-in-out_infinite]"
+            className="object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.4)] animate-[float_6s_ease-in-out_infinite] scale-140"
           />
         </div>
 
