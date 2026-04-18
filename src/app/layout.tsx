@@ -13,11 +13,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-    <html lang="en">
-      <body className="bg-black min-h-screen">
-        <Navigation />
-        <main className="relative z-5">{children}</main>
-      </body>
-    </html>
+		<html lang="en">
+			<body className="bg-black min-h-screen">
+				<Navigation />
+				<main className="relative z-5">{children}</main>
+			</body>
+		</html>
 	);
 }
