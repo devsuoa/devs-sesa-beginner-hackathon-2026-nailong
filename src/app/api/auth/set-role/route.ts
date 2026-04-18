@@ -4,30 +4,24 @@ import { prisma } from "@/lib/prisma";
 import { Role } from "@/generated/prisma/enums";
 
 export async function POST(req: NextRequest) {
-  const { role } = await req.json();
   const supabase = await createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  if (!session)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { roles }: { roles: string[] } = await req.json();
 
-  const roleValue = role === "driver" ? Role.DRIVER : Role.RIDER;
+  if (!roles || roles.length === 0) {
+    return NextResponse.json({ error: "Select at least one role" }, { status: 400 });
+  }
 
-  const profile = await prisma.profile.findUnique({
-    where: { id: session.user.id },
-    select: { roles: true },
-  });
-
-  const updatedRoles = Array.from(
-    new Set([...(profile?.roles ?? []), roleValue]),
+  const roleValues = roles.map((r) =>
+    r.toUpperCase() === "DRIVER" ? Role.DRIVER : Role.RIDER
   );
 
   await prisma.profile.update({
     where: { id: session.user.id },
     data: {
-      roles: updatedRoles, // set the whole array
+      roles: roleValues, // set the whole array in one shot
     },
   });
 

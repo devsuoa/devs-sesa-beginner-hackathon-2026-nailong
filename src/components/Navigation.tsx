@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
 import { useUser } from "@/providers/UserProvider";
 import type { User } from "@supabase/supabase-js";
-import { parseUser } from "@/lib/utils";
+import { type ParsedUser, parseUser } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "HOME", href: "/" },
@@ -218,16 +218,15 @@ export default function Navigation() {
 }
 
 /* ── Mobile avatar (icon only, no dropdown) ── */
-function MobileAvatar({ user }: { user: User }) {
-  const parsedUser = parseUser(user);
-  const initials = parsedUser.name
-    ? parsedUser.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-    : parsedUser.email[0].toUpperCase();
+function MobileAvatar({ user }: { user: ParsedUser}) {
+  const initials = user.name
+    ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+    : user.email[0].toUpperCase();
 
-  return parsedUser.avatarUrl ? (
+  return user.avatarUrl ? (
     <Image
-      src={parsedUser.avatarUrl}
-      alt={parsedUser.name ?? "User"}
+      src={user.avatarUrl}
+      alt={user.name ?? "User"}
       width={28}
       height={28}
       className="rounded-full border border-white/20 object-cover"
@@ -248,23 +247,22 @@ function MobileUserSection({
   onSignOut,
   onClose,
 }: {
-  user: User;
+  user: ParsedUser;
   onSignOut: () => void;
   onClose: () => void;
 }) {
-  const parsedUser = parseUser(user);
-  const initials = parsedUser.name
-    ? parsedUser.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-    : parsedUser.email[0].toUpperCase();
+  const initials = user.name
+    ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+    : user.email[0].toUpperCase();
 
   return (
     <div className="flex flex-col gap-0.5">
       {/* User info */}
       <div className="flex items-center gap-3 px-4 py-3 mb-1">
-        {parsedUser.avatarUrl ? (
+        {user.avatarUrl ? (
           <Image
-            src={parsedUser.avatarUrl}
-            alt={parsedUser.name ?? "User"}
+            src={user.avatarUrl}
+            alt={user.name ?? "User"}
             width={32}
             height={32}
             className="rounded-full border border-white/20 object-cover"
@@ -282,14 +280,14 @@ function MobileUserSection({
             className="text-[11px] text-white/80 tracking-widest"
             style={{ fontFamily: "'Orbitron', monospace" }}
           >
-            {parsedUser.name?.split(" ")[0].toUpperCase() ??
-              parsedUser.email.split("@")[0].toUpperCase()}
+            {user.name?.split(" ")[0].toUpperCase() ??
+              user.email.split("@")[0].toUpperCase()}
           </p>
           <p
             className="text-[9px] text-white/35 tracking-wider truncate"
             style={{ fontFamily: "'Share Tech Mono', monospace" }}
           >
-            {parsedUser.email}
+            {user.email}
           </p>
         </div>
       </div>
@@ -322,13 +320,12 @@ function MobileUserSection({
 }
 
 /* ── Desktop user menu with dropdown ── */
-function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
+function UserMenu({ user, onSignOut }: { user: ParsedUser; onSignOut: () => void }) {
   const [open, setOpen] = useState(false);
-  const parsedUser = parseUser(user);
 
-  const initials = parsedUser.name
-    ? parsedUser.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-    : parsedUser.email[0].toUpperCase();
+  const initials = user.name
+    ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+    : user.email[0].toUpperCase();
 
   return (
     <div className="relative">
@@ -337,10 +334,10 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 cursor-pointer bg-transparent border-none"
       >
-        {parsedUser.avatarUrl ? (
+        {user.avatarUrl ? (
           <Image
-            src={parsedUser.avatarUrl}
-            alt={parsedUser.name ?? "User"}
+            src={user.avatarUrl}
+            alt={user .name ?? "User"}
             className="w-8 h-8 rounded-full border border-white/20 object-cover"
             width={32}
             height={32}
@@ -358,8 +355,8 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
           className="text-[10px] text-white/70 tracking-widest hidden lg:block"
           style={{ fontFamily: "'Share Tech Mono', monospace" }}
         >
-          {parsedUser.name?.split(" ")[0].toUpperCase() ??
-            parsedUser.email.split("@")[0].toUpperCase()}
+          {user.name?.split(" ")[0].toUpperCase() ??
+            user.email.split("@")[0].toUpperCase()}
         </span>
 
         <svg
@@ -383,7 +380,7 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
               className="text-[10px] text-white/40 tracking-widest truncate"
               style={{ fontFamily: "'Share Tech Mono', monospace" }}
             >
-              {parsedUser.email}
+              {user.email}
             </p>
           </div>
           <Link href="/account">

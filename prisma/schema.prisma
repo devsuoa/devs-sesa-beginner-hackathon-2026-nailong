@@ -19,17 +19,15 @@ datasource db {
 // ─────────────────────────────────────────
 
 model Profile {
-  id        String   @id @default(uuid())
-  roles     Role[]   @default([])
-  email     String   @unique
-  firstName String
-  lastName  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  roles       Role[]   @default([])
+  email       String   @unique
+  displayName String   @default("Unnamed User")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   rider  RiderProfile?
   driver DriverProfile?
-
 
   @@map("profiles")
 }

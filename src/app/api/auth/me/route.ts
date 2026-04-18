@@ -1,12 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
+import { Role } from "@/generated/prisma/enums";
+import { parseUser } from "@/lib/utils";
 
 export async function GET() {
 	const supabase = await createClient();
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
+
+  const parsedUser = parseUser(user)
 
 	if (!user) {
 		return NextResponse.json({ user: null }, { status: 401 });
@@ -20,48 +24,47 @@ export async function GET() {
 		},
 	});
 
-	return NextResponse.json({ user, profile });
+	return NextResponse.json({ user: parsedUser, profile });
 }
 
 export async function PATCH(req: NextRequest) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { displayName, isRider, isDriver } = await req.json();
 
-  // Must keep at least one role
-  if (isRider === false && isDriver === false) {
+  if (!isRider && !isDriver) {
     return NextResponse.json(
       { error: "You must keep at least one role" },
       { status: 400 }
     );
   }
 
+  // Build roles array from the booleans the frontend sends
+  const roles: Role[] = [
+    ...(isRider ? [Role.RIDER] : []),
+    ...(isDriver ? [Role.DRIVER] : []),
+  ];
+
   const profile = await prisma.profile.update({
-    where: { id: user.id },
+    where: { id: session.user.id },
     data: {
       ...(displayName !== undefined && { displayName }),
-      ...(isRider !== undefined && { isRider }),
-      ...(isDriver !== undefined && { isDriver }),
-      // Keep primary role in sync
-      ...(isRider !== undefined &&
-        isDriver !== undefined && {
-          role: isRider ? "RIDER" : "DRIVER",
-        }),
-      // Create nested profiles if newly toggled on
-      ...(isRider === true && {
+      roles,
+      // Create nested profiles if newly enabled
+      ...(isRider && {
         rider: {
           connectOrCreate: {
-            where: { profileId: user.id },
+            where: { profileId: session.user.id },
             create: {},
           },
         },
       }),
-      ...(isDriver === true && {
+      ...(isDriver && {
         driver: {
           connectOrCreate: {
-            where: { profileId: user.id },
+            where: { profileId: session.user.id },
             create: { vesselName: "Unnamed Vessel", vesselType: "SHUTTLE" },
           },
         },

@@ -27,8 +27,7 @@ export type AggregateProfile = {
 export type ProfileMinAggregateOutputType = {
   id: string | null
   email: string | null
-  firstName: string | null
-  lastName: string | null
+  displayName: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,8 +35,7 @@ export type ProfileMinAggregateOutputType = {
 export type ProfileMaxAggregateOutputType = {
   id: string | null
   email: string | null
-  firstName: string | null
-  lastName: string | null
+  displayName: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,8 +44,7 @@ export type ProfileCountAggregateOutputType = {
   id: number
   roles: number
   email: number
-  firstName: number
-  lastName: number
+  displayName: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -57,8 +54,7 @@ export type ProfileCountAggregateOutputType = {
 export type ProfileMinAggregateInputType = {
   id?: true
   email?: true
-  firstName?: true
-  lastName?: true
+  displayName?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -66,8 +62,7 @@ export type ProfileMinAggregateInputType = {
 export type ProfileMaxAggregateInputType = {
   id?: true
   email?: true
-  firstName?: true
-  lastName?: true
+  displayName?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,8 +71,7 @@ export type ProfileCountAggregateInputType = {
   id?: true
   roles?: true
   email?: true
-  firstName?: true
-  lastName?: true
+  displayName?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -159,8 +153,7 @@ export type ProfileGroupByOutputType = {
   id: string
   roles: $Enums.Role[]
   email: string
-  firstName: string
-  lastName: string | null
+  displayName: string
   createdAt: Date
   updatedAt: Date
   _count: ProfileCountAggregateOutputType | null
@@ -190,8 +183,7 @@ export type ProfileWhereInput = {
   id?: Prisma.StringFilter<"Profile"> | string
   roles?: Prisma.EnumRoleNullableListFilter<"Profile">
   email?: Prisma.StringFilter<"Profile"> | string
-  firstName?: Prisma.StringFilter<"Profile"> | string
-  lastName?: Prisma.StringNullableFilter<"Profile"> | string | null
+  displayName?: Prisma.StringFilter<"Profile"> | string
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   rider?: Prisma.XOR<Prisma.RiderProfileNullableScalarRelationFilter, Prisma.RiderProfileWhereInput> | null
@@ -202,8 +194,7 @@ export type ProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   roles?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   rider?: Prisma.RiderProfileOrderByWithRelationInput
@@ -217,8 +208,7 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProfileWhereInput[]
   NOT?: Prisma.ProfileWhereInput | Prisma.ProfileWhereInput[]
   roles?: Prisma.EnumRoleNullableListFilter<"Profile">
-  firstName?: Prisma.StringFilter<"Profile"> | string
-  lastName?: Prisma.StringNullableFilter<"Profile"> | string | null
+  displayName?: Prisma.StringFilter<"Profile"> | string
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   rider?: Prisma.XOR<Prisma.RiderProfileNullableScalarRelationFilter, Prisma.RiderProfileWhereInput> | null
@@ -229,8 +219,7 @@ export type ProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   roles?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProfileCountOrderByAggregateInput
@@ -245,8 +234,7 @@ export type ProfileScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Profile"> | string
   roles?: Prisma.EnumRoleNullableListFilter<"Profile">
   email?: Prisma.StringWithAggregatesFilter<"Profile"> | string
-  firstName?: Prisma.StringWithAggregatesFilter<"Profile"> | string
-  lastName?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  displayName?: Prisma.StringWithAggregatesFilter<"Profile"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
 }
@@ -255,8 +243,7 @@ export type ProfileCreateInput = {
   id?: string
   roles?: Prisma.ProfileCreaterolesInput | $Enums.Role[]
   email: string
-  firstName: string
-  lastName?: string | null
+  displayName?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   rider?: Prisma.RiderProfileCreateNestedOneWithoutProfileInput
@@ -267,8 +254,7 @@ export type ProfileUncheckedCreateInput = {
   id?: string
   roles?: Prisma.ProfileCreaterolesInput | $Enums.Role[]
   email: string
-  firstName: string
-  lastName?: string | null
+  displayName?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   rider?: Prisma.RiderProfileUncheckedCreateNestedOneWithoutProfileInput
@@ -279,8 +265,7 @@ export type ProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rider?: Prisma.RiderProfileUpdateOneWithoutProfileNestedInput
@@ -291,8 +276,7 @@ export type ProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rider?: Prisma.RiderProfileUncheckedUpdateOneWithoutProfileNestedInput
@@ -303,8 +287,7 @@ export type ProfileCreateManyInput = {
   id?: string
   roles?: Prisma.ProfileCreaterolesInput | $Enums.Role[]
   email: string
-  firstName: string
-  lastName?: string | null
+  displayName?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -313,8 +296,7 @@ export type ProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -323,8 +305,7 @@ export type ProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -341,8 +322,7 @@ export type ProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   roles?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -350,8 +330,7 @@ export type ProfileCountOrderByAggregateInput = {
 export type ProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -359,8 +338,7 @@ export type ProfileMaxOrderByAggregateInput = {
 export type ProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -381,10 +359,6 @@ export type StringFieldUpdateOperationsInput = {
 export type ProfileUpdaterolesInput = {
   set?: $Enums.Role[]
   push?: $Enums.Role | $Enums.Role[]
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -423,8 +397,7 @@ export type ProfileCreateWithoutRiderInput = {
   id?: string
   roles?: Prisma.ProfileCreaterolesInput | $Enums.Role[]
   email: string
-  firstName: string
-  lastName?: string | null
+  displayName?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   driver?: Prisma.DriverProfileCreateNestedOneWithoutProfileInput
@@ -434,8 +407,7 @@ export type ProfileUncheckedCreateWithoutRiderInput = {
   id?: string
   roles?: Prisma.ProfileCreaterolesInput | $Enums.Role[]
   email: string
-  firstName: string
-  lastName?: string | null
+  displayName?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   driver?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutProfileInput
@@ -461,8 +433,7 @@ export type ProfileUpdateWithoutRiderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driver?: Prisma.DriverProfileUpdateOneWithoutProfileNestedInput
@@ -472,8 +443,7 @@ export type ProfileUncheckedUpdateWithoutRiderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driver?: Prisma.DriverProfileUncheckedUpdateOneWithoutProfileNestedInput
@@ -483,8 +453,7 @@ export type ProfileCreateWithoutDriverInput = {
   id?: string
   roles?: Prisma.ProfileCreaterolesInput | $Enums.Role[]
   email: string
-  firstName: string
-  lastName?: string | null
+  displayName?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   rider?: Prisma.RiderProfileCreateNestedOneWithoutProfileInput
@@ -494,8 +463,7 @@ export type ProfileUncheckedCreateWithoutDriverInput = {
   id?: string
   roles?: Prisma.ProfileCreaterolesInput | $Enums.Role[]
   email: string
-  firstName: string
-  lastName?: string | null
+  displayName?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   rider?: Prisma.RiderProfileUncheckedCreateNestedOneWithoutProfileInput
@@ -521,8 +489,7 @@ export type ProfileUpdateWithoutDriverInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rider?: Prisma.RiderProfileUpdateOneWithoutProfileNestedInput
@@ -532,8 +499,7 @@ export type ProfileUncheckedUpdateWithoutDriverInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   roles?: Prisma.ProfileUpdaterolesInput | $Enums.Role[]
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rider?: Prisma.RiderProfileUncheckedUpdateOneWithoutProfileNestedInput
@@ -545,8 +511,7 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   roles?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
+  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   rider?: boolean | Prisma.Profile$riderArgs<ExtArgs>
@@ -557,8 +522,7 @@ export type ProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   roles?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
+  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["profile"]>
@@ -567,8 +531,7 @@ export type ProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   roles?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
+  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["profile"]>
@@ -577,13 +540,12 @@ export type ProfileSelectScalar = {
   id?: boolean
   roles?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
+  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roles" | "email" | "firstName" | "lastName" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
+export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roles" | "email" | "displayName" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
 export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   rider?: boolean | Prisma.Profile$riderArgs<ExtArgs>
   driver?: boolean | Prisma.Profile$driverArgs<ExtArgs>
@@ -601,8 +563,7 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: string
     roles: $Enums.Role[]
     email: string
-    firstName: string
-    lastName: string | null
+    displayName: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["profile"]>
@@ -1033,8 +994,7 @@ export interface ProfileFieldRefs {
   readonly id: Prisma.FieldRef<"Profile", 'String'>
   readonly roles: Prisma.FieldRef<"Profile", 'Role[]'>
   readonly email: Prisma.FieldRef<"Profile", 'String'>
-  readonly firstName: Prisma.FieldRef<"Profile", 'String'>
-  readonly lastName: Prisma.FieldRef<"Profile", 'String'>
+  readonly displayName: Prisma.FieldRef<"Profile", 'String'>
   readonly createdAt: Prisma.FieldRef<"Profile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Profile", 'DateTime'>
 }

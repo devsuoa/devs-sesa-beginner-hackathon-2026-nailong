@@ -20,10 +20,7 @@ export default function OnboardingPage() {
     // Dual role → go to /ride by default (they can switch to /drive from nav)
     // Driver only → go to /drive
     // Rider only → go to /ride
-    const destination =
-      roles.includes("DRIVER") && !roles.includes("RIDER")
-        ? "/drive"
-        : "/ride";
+    const destination = "/account";
 
     router.push(destination);
   }

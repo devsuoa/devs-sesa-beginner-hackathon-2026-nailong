@@ -29,8 +29,7 @@ export async function GET(req: NextRequest) {
 					id: session.user.id,
 					email: session.user.email ?? "",
 					roles: [],
-					firstName: session.user.user_metadata?.first_name ?? "",
-					lastName: session.user.user_metadata?.last_name ?? null
+					displayName: session.user.user_metadata?.full_name ?? "Unnamed User",
 				},
 			});
 

@@ -420,6 +420,10 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type RiderProfileCreateNestedManyWithoutHomeLocationInput = {
   create?: Prisma.XOR<Prisma.RiderProfileCreateWithoutHomeLocationInput, Prisma.RiderProfileUncheckedCreateWithoutHomeLocationInput> | Prisma.RiderProfileCreateWithoutHomeLocationInput[] | Prisma.RiderProfileUncheckedCreateWithoutHomeLocationInput[]
   connectOrCreate?: Prisma.RiderProfileCreateOrConnectWithoutHomeLocationInput | Prisma.RiderProfileCreateOrConnectWithoutHomeLocationInput[]

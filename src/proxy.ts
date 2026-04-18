@@ -1,12 +1,9 @@
-// middleware.ts
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
 const PUBLIC_ROUTES = ["/", "/auth"];
-// const RIDER_ROUTES = ["/ride"];
-// const DRIVER_ROUTES = ["/drive"];
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
 	let res = NextResponse.next({ request: req });
 	const path = req.nextUrl.pathname;
 
@@ -39,12 +36,30 @@ export async function middleware(req: NextRequest) {
 
 	// Block unauthenticated users
 	if (!user && !isPublic) {
-		return NextResponse.redirect(new URL("/auth", req.url));
+		return NextResponse.redirect(new URL("/api/auth/login", req.url));
 	}
 
 	// Send logged-in users away from /auth
-	if (user && path === "/auth") {
+	if (user && path === "/api/auth/login") {
 		return NextResponse.redirect(new URL("/ride", req.url));
+	}
+
+	if (user && !isPublic) {
+		const { data: profile } = await supabase
+			.from("profiles")
+			.select("roles")
+			.eq("id", user.id)
+			.single();
+
+		const hasRoles = profile?.roles && profile.roles.length > 0;
+
+		if (!hasRoles && path !== "/onboarding") {
+			return NextResponse.redirect(new URL("/onboarding", req.url));
+		}
+
+		if (hasRoles && path === "/onboarding") {
+			return NextResponse.redirect(new URL("/account", req.url));
+		}
 	}
 
 	return res;

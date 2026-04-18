@@ -2,11 +2,12 @@
  
 import type { Profile } from "@/generated/prisma/client";
 import { createClient } from "@/lib/supabase/client";
-import type { User } from "@supabase/supabase-js";
+import { parseUser, type ParsedUser } from "@/lib/utils";
+import { User } from "@supabase/supabase-js";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
  
 type UserContextType = {
-  user: User | null;
+  user: ParsedUser | null;
   profile: Profile | null;
   loading: boolean;
 };
@@ -18,7 +19,7 @@ const UserContext = createContext<UserContextType>({
 });
  
 export default function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<ParsedUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,14 +34,16 @@ export default function UserProvider({ children }: { children: React.ReactNode }
  
     async function getSession() {
       const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
+      const user = parseUser(session?.user ?? null);
+      setUser(user);
       setLoading(false);
     }
  
     getSession();
  
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setUser(session?.user ?? null);
+      const user = parseUser(session?.user ?? null);
+      setUser(user);
       if (session?.user) await fetchProfile();
       else setProfile(null);
       setLoading(false);

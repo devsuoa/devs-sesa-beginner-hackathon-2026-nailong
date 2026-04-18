@@ -896,8 +896,7 @@ export const ProfileScalarFieldEnum = {
   id: 'id',
   roles: 'roles',
   email: 'email',
-  firstName: 'firstName',
-  lastName: 'lastName',
+  displayName: 'displayName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
