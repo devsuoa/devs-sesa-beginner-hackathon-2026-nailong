@@ -35,6 +35,7 @@ export default function Home() {
 					</h1>
 
 					{/* Pick Up */}
+					{/*
 					<div className="relative w-full mb-8 flex items-center gap-4">
 						<span className="corner-pip corner-pip--tl" />
 						<span className="corner-pip corner-pip--tr" />
@@ -55,8 +56,10 @@ export default function Home() {
 				focus:border-white/60 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(100,200,255,0.5)]"
 						/>
 					</div>
+					*/}
 
 					{/* Drop Off */}
+					{/*
 					<div className="relative w-full mb-8 flex items-center gap-4">
 						<span className="corner-pip corner-pip--tl" />
 						<span className="corner-pip corner-pip--tr" />
@@ -77,7 +80,10 @@ export default function Home() {
 				focus:border-white/60 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(100,200,255,0.5)]"
 						/>
 					</div>
+					*/}
 
+					{/* Submit Button */}
+					{/*
 					<button
 						className="relative w-full h-16 flex items-center justify-center mb-4
             text-white tracking-[0.2em] text-sm
@@ -93,6 +99,7 @@ export default function Home() {
 						<span className="corner-pip corner-pip--br" />
 						SUBMIT
 					</button>
+					*/}
 				</div>
 			</div>
 		</div>
