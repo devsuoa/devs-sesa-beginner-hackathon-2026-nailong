@@ -12,50 +12,36 @@ export async function GET(req: NextRequest) {
 	}
 
 	const supabase = await createClient();
-	const {
-		data: { session },
-		error,
-	} = await supabase.auth.exchangeCodeForSession(code);
+	const { data: { session }, error } = await supabase.auth.exchangeCodeForSession(code);
 
 	if (error || !session) {
+		console.error("Supabase auth error:", error);
 		return NextResponse.redirect(`${origin}/auth?error=auth_failed`);
 	}
 
-	// Upsert profile + role-specific profile on first login
-	const existing = await prisma.profile.findUnique({
-		where: { id: session.user.id },
-	});
-
-	if (!existing) {
-		await prisma.profile.create({
-			data: {
-				id: session.user.id,
-				email: session.user.email ?? "",
-				role: role === "driver" ? "DRIVER" : "RIDER",
-				firstName: session.user.user_metadata?.first_name,
-				lastName: session.user.user_metadata?.last_name ?? null,
-				...(role === "rider"
-					? { rider: { create: {} } }
-					: {
-							driver: {
-								create: {
-									vesselName: "Unnamed Vessel",
-									vesselType: "SHUTTLE",
-								},
-							},
-						}),
-			},
-		});
-	}
-
-	// Redirect based on role
-	const profile =
-		existing ??
-		(await prisma.profile.findUnique({
+	try {
+		const existing = await prisma.profile.findUnique({
 			where: { id: session.user.id },
-			select: { role: true },
-		}));
+		});
 
-	const destination = profile?.role === "DRIVER" ? "/drive" : "/ride";
-	return NextResponse.redirect(`${origin}${destination}`);
+		if (!existing) {
+			await prisma.profile.create({
+				data: {
+					id: session.user.id,
+					email: session.user.email ?? "",
+					role: role === "driver" ? "DRIVER" : "RIDER",
+					firstName: session.user.user_metadata?.first_name ?? "",
+					lastName: session.user.user_metadata?.last_name ?? null
+				},
+			});
+
+			return NextResponse.redirect(`${origin}/onboarding`);
+		}
+
+		return NextResponse.redirect(`${origin}`);
+
+	} catch (err) {
+		console.error("Prisma error:", err);
+		return NextResponse.redirect(`${origin}?error=db_failed`);
+	}
 }
