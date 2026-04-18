@@ -68,41 +68,33 @@ function ConfirmRideContent() {
   const shuttleDetails = SHUTTLE_DETAILS[shuttleId as keyof typeof SHUTTLE_DETAILS];
 
   const handleConfirmRide = () => {
-    // Generate a unique booking ID
     const bookingId = generateBookingId();
     
-    // Create booking data
     const bookingData = {
-      id: bookingId,
-      pickup,
-      dropoff,
-      shuttleId,
-      shuttleName: shuttleDetails?.name,
-      basePrice,
-      distance,
-      distanceCost,
-      fuelSurcharge,
-      tax,
-      totalPrice: totalPrice.toFixed(2),
-      status: "CONFIRMED",
-      createdAt: new Date().toISOString(),
-      eta: "12",
-      driver: {
+        id: bookingId,
+        pickup,
+        dropoff,
+        shuttleId,
+        shuttleName: shuttleDetails?.name,
+        basePrice,
+        distance,
+        distanceCost,
+        fuelSurcharge,
+        tax,
+        totalPrice: totalPrice.toFixed(2),
+        status: "CONFIRMED",
+        createdAt: new Date().toISOString(),
+        eta: "15",
+        driver: {
         name: "Captain Vega",
         id: `NX-${Math.floor(Math.random() * 1000)}`,
         rating: 4.98,
         rides: 1200,
-        vehicle: shuttleDetails?.name,
         license: `SPC-${Math.floor(Math.random() * 9000 + 1000)}`
-      }
+        }
     };
     
-    // Save to localStorage (temporary)
     saveBooking(bookingId, bookingData);
-    
-    console.log("Booking created:", bookingData);
-    
-    // Redirect to dynamic tracking page with booking ID
     router.push(`/ride/track/${bookingId}`);
   };
 
