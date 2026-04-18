@@ -1,13 +1,11 @@
 "use client";
 
 import NailongPlanet from "@/components/NailongPlanet";
-import Starfield from "../components/Starfield";
 import Image from "next/image";
 
 export default function Home() {
 	return (
 		<div className="relative min-h-screen flex items-center justify-center px-8">
-			<Starfield />
 			<NailongPlanet />
 
 			<div className="flex w-full max-w-6xl items-center justify-between gap-10">
