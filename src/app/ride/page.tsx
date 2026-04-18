@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Starfield from "@/components/Starfield";
 import NailongPlanet from "@/components/NailongPlanet";
-import ShuttleOptions from "@/components/Shuttles";
+import ShuttleOptions from "@/components/ShuttleOptions";
+import Link from "next/link";
 
 const PLANETS = [
   "Mars 🔴",
@@ -15,9 +17,37 @@ const PLANETS = [
   "Mercury ☀️",
 ];
 
+// Shuttle prices mapping (should match your Shuttles component)
+const SHUTTLE_PRICES = {
+  orbit: 120,
+  nova: 180,
+  nailong: 240,
+  quantum: 380,
+  void: 520,
+};
+
 export default function Ride() {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
+  const [selectedShuttle, setSelectedShuttle] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleConfirm = () => {
+    if (!pickup || !dropoff || !selectedShuttle) {
+      alert("Please fill all fields and select a shuttle");
+      return;
+    }
+
+    // Encode the data and pass via URL
+    const params = new URLSearchParams({
+        pickup: pickup,
+        dropoff: dropoff,
+        shuttle: selectedShuttle,
+        price: SHUTTLE_PRICES[selectedShuttle as keyof typeof SHUTTLE_PRICES].toString(),
+    });
+
+    router.push(`/ride/confirm?${params.toString()}`);
+  };
 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col gap-8">
@@ -86,10 +116,12 @@ export default function Ride() {
       </div>
 
       {/* SHUTTLE OPTIONS */}
-      <ShuttleOptions />
+      <ShuttleOptions onSelectShuttle={setSelectedShuttle} />
 
       {/* SUBMIT */}
-      <button
+      <Link href="/ride/confirm">
+        <button
+        onClick={handleConfirm}
         className="relative w-full h-14 flex items-center justify-center
         text-white tracking-[0.25em] text-sm font-semibold
         border border-white/20 bg-black/40 backdrop-blur-md
@@ -104,6 +136,7 @@ export default function Ride() {
 
         CONFIRM ROUTE
       </button>
+      </Link>
     </div>
   );
 }
