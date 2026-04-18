@@ -7,13 +7,13 @@ const SHUTTLES = [
   {
     id: "orbit",
     name: "Orbit Classic",
-    img: "/shuttle1.png",
+    img: "/shuttleClassic.png",
     price: "120 cr",
   },
   {
-    id: "nova",
-    name: "Nova Cruiser",
-    img: "/shuttle2.png",
+    id: "express",
+    name: "Warp Express",
+    img: "/shuttleExpress.png",
     price: "180 cr",
   },
   {
@@ -23,15 +23,15 @@ const SHUTTLES = [
     price: "240 cr",
   },
   {
-    id: "quantum",
-    name: "Quantum X",
-    img: "/shuttle4.png",
+    id: "cargo",
+    name: "Cargo Hauler",
+    img: "/shuttleCargo.png",
     price: "380 cr",
   },
   {
-    id: "void",
-    name: "Void Phantom",
-    img: "/shuttle5.png",
+    id: "class",
+    name: "Command Class",
+    img: "/shuttleLuxury.png",
     price: "520 cr",
   },
 ];
@@ -73,12 +73,13 @@ export default function ShuttleOptions({ onSelectShuttle }: { onSelectShuttle: (
                   }
                 `}
               >
-                <div className="h-32 relative">
+                <div className="h-32 relative overflow-hidden">
                   <Image
                     src={s.img}
                     alt={s.name}
                     fill
-                    className="object-contain p-3"
+                    className="object-contain p-3 scale-220"
+                    sizes="(max-width: 220px) 100vw, 220px"
                   />
                 </div>
                 <div className="p-3 text-center">

@@ -18,10 +18,10 @@ const DISTANCES: Record<string, Record<string, number>> = {
 // Shuttle details
 const SHUTTLE_DETAILS = {
   orbit: { name: "Orbit Classic", speed: 10, comfort: "Standard" },
-  nova: { name: "Nova Cruiser", speed: 15, comfort: "Enhanced" },
+  express: { name: "Warp Express", speed: 15, comfort: "Enhanced" },
   nailong: { name: "Nailong Runner", speed: 25, comfort: "Luxury" },
-  quantum: { name: "Quantum X", speed: 40, comfort: "Premium" },
-  void: { name: "Void Phantom", speed: 60, comfort: "Elite" },
+  cargo: { name: "Cargo Hauler", speed: 35, comfort: "Utility" },
+  class: { name: "Command Class", speed: 50, comfort: "Premium" },
 };
 
 function ConfirmRideContent() {
