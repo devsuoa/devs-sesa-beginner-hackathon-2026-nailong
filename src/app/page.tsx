@@ -1,13 +1,10 @@
 "use client";
 
-import NailongPlanet from "@/components/NailongPlanet";
 import Image from "next/image";
 
 export default function Home() {
 	return (
 		<div className="relative min-h-screen flex items-center justify-center px-8">
-			<NailongPlanet />
-
 			<div className="flex w-full max-w-6xl items-center justify-between gap-10">
 				{/* LEFT: Image */}
 				<div className="w-1/2 flex justify-center">

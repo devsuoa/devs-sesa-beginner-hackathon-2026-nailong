@@ -4,7 +4,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import Starfield from "./Starfield";
 import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
 import { useUser } from "@/providers/UserProvider";
@@ -75,8 +74,6 @@ export default function Navigation() {
 
   return (
     <>
-      <Starfield />
-
       {/* Grid overlay */}
       <div
         className="fixed inset-0 pointer-events-none z-1"

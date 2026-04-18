@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import Starfield from "@/components/Starfield";
 import UserProvider from "@/providers/UserProvider";
 import "./globals.css";
+import NailongPlanet from "@/components/NailongPlanet";
 
 export const metadata: Metadata = {
   title: "Home | Nailong Express",
@@ -19,7 +20,10 @@ export default function RootLayout({
       <body className="bg-black min-h-screen">
         <UserProvider>
           <Navigation />
+
+
           <main className="relative z-5">
+            <NailongPlanet />
             <Starfield />
             {children}
           </main>
