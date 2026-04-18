@@ -1,6 +1,19 @@
-# Contributing
+# Team Nailong: SESA x DEVS 2026 Hackathon
 
-## Branch naming
+## Nailong Express
+
+With this hackathon's theme being "Out of this world", we have decided to present our own solution for humanity, set in the near future. In this near future, humanity no longer resides on earth, but among the moon and neighbouring planets in our solar system. Humanity is only beginning to settle to this new environment, and transportation is scarce and unaffordable. To solve this, we have created NailongExpress, based off Uber - but for space. This will be government funded, with space ships for transportation being provided by them.
+
+## Teck Stack
+ - TypeScript/Node.js
+ - Next.js
+ - Supabase + Prisma
+ - TailwindCSS
+ - Biome
+
+## Contributing
+
+### Branch naming
 
 Branches follow the format `<type>/<short-description>`, where `type` matches one of the conventional commit types below.
 
@@ -13,9 +26,9 @@ docs/db-migration-workflow
 
 Keep the description lowercase and hyphen-separated. Avoid vague names like `patch`, `updates`, or `wip`.
 
-## Commit messages
+### Commit messages
 
-All commits must follow the [Conventional Commits](https://www.conventionalcommits.org) specification. Non-conforming commits are rejected by the pre-commit hook (commitlint + Husky).
+All commits must follow the [Conventional Commits](https://www.conventionalcommits.org) specification.
 
 ```
 <type>(<optional scope>): <description>
@@ -48,7 +61,7 @@ fix(db): correct unique constraint on PersonIdentity
 chore(web): upgrade to Next.js 15.1
 ```
 
-## Merging and rebasing
+### Merging and rebasing
 
 Favour rebasing over merge commits — it keeps history linear and makes it easier to follow what changed and why.
 
@@ -73,7 +86,7 @@ git push --force-with-lease origin <your-branch>
 git push -u origin <your-branch>
 ```
 
-## Pull requests
+### Pull requests
 
 Name your PR using the format `[#<issue>] short description`, e.g. `[#42] add Discord ingestion job`. The issue number links the PR to the GitHub Projects board; the description should be a brief, lowercase summary of what changed.
 
