@@ -4,6 +4,18 @@
 
 With this hackathon's theme being "Out of this world", we have decided to present our own solution for humanity, set in the near future. In this near future, humanity no longer resides on earth, but among the moon and neighbouring planets in our solar system. Humanity is only beginning to settle to this new environment, and transportation is scarce and unaffordable. To solve this, we have created NailongExpress, based off Uber - but for space. This will be government funded, with space ships for transportation being provided by them.
 
+# Next.js Configuration
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Prisma/Supabase Configuration
+DATABASE_URL="postgresql://postgres.rmgznjbvnuvlwnaimyrq:EK6KyVE4S*EQd6f@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.rmgznjbvnuvlwnaimyrq:EK6KyVE4S*EQd6f@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres"
+NEXT_PUBLIC_SUPABASE_URL="https://rmgznjbvnuvlwnaimyrq.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_ta7VT9Klw3ig4lytQEC-VQ_kNNAaz-o"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtZ3puamJ2bnV2bHduYWlteXJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NDg0ODEsImV4cCI6MjA5MjAyNDQ4MX0.YdizQ62wz289bnpbIVOAvHQ5iAhDX381HrVh9PpzIpQ"
+SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtZ3puamJ2bnV2bHduYWlteXJxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjQ0ODQ4MSwiZXhwIjoyMDkyMDI0NDgxfQ.KVpEPBE6ZoBQDNbfYzXCS-0XQLaq6BG5gCquXwSqHGo"
+SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET="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"
+
 ## Teck Stack
  - TypeScript/Node.js
  - Next.js
