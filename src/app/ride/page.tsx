@@ -96,7 +96,6 @@ export default function Ride() {
         transition-all duration-300
         hover:border-white/60 hover:bg-white/10 hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]
         active:scale-95"
-        style={{ fontFamily: "'Share Tech Mono', monospace" }}
       >
         <span className="corner-pip corner-pip--tl" />
         <span className="corner-pip corner-pip--tr" />

@@ -17,9 +17,9 @@ const SHUTTLES = [
     price: "180 cr",
   },
   {
-    id: "warp",
-    name: "Warp Runner",
-    img: "/shuttle3.png",
+    id: "nailong",
+    name: "Nailong Runner",
+    img: "/shuttleNailong.png",
     price: "240 cr",
   },
   {
@@ -49,55 +49,64 @@ export default function ShuttleOptions() {
         SELECT YOUR SHUTTLE
       </h2>
 
-      {/* Scroll row */}
-      <div className="flex gap-4 overflow-x-auto pb-3 px-1 scrollbar-hide">
+      <div className="relative">
 
-        {SHUTTLES.map((s) => {
-          const isActive = selected === s.id;
+         {/* Left fade overlay */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black via-black/80 to-transparent pointer-events-none z-10" />
+        
+        {/* Right fade overlay */}
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black via-black/80 to-transparent pointer-events-none z-10" />
 
-          return (
-            <div
-              key={s.id}
-              onClick={() => setSelected(s.id)}
-              className={`
-                relative min-w-[220px] flex-shrink-0 cursor-pointer
-                rounded-lg border backdrop-blur-md
-                transition-all duration-300
-                ${
-                  isActive
-                    ? "border-white/70 bg-white/10 scale-105 shadow-[0_0_25px_rgba(255,255,255,0.3)]"
-                    : "border-white/20 bg-black/40 hover:border-white/40 hover:bg-white/5"
-                }
-              `}
-            >
-              {/* Image */}
-              <div className="h-32 relative">
-                <Image
-                  src={s.img}
-                  alt={s.name}
-                  fill
-                  className="object-contain p-3"
-                />
-              </div>
+        {/* Scroll row */}
+        <div className="flex gap-4 overflow-x-auto pb-3 px-1 scrollbar-hide overflow-y-visible pb-3 px-2 pt-2 scrollbar-hide">
 
-              {/* Info */}
-              <div className="p-3 text-center">
-                <p className="text-white text-xs tracking-[0.2em]">
-                  {s.name}
-                </p>
-                <p className="text-white/50 text-[10px] mt-1">
-                  {s.price}
-                </p>
-              </div>
+            {SHUTTLES.map((s) => {
+            const isActive = selected === s.id;
 
-              {/* Glow border */}
-              {isActive && (
-                <div className="absolute inset-0 rounded-lg border border-white/30 pointer-events-none" />
-              )}
-            </div>
-          );
-        })}
+            return (
+                <div
+                key={s.id}
+                onClick={() => setSelected(s.id)}
+                className={`
+                    relative min-w-[220px] flex-shrink-0 cursor-pointer
+                    rounded-lg border backdrop-blur-md
+                    transition-all duration-300
+                    ${
+                    isActive
+                        ? "border-white/70 bg-white/10 scale-105 shadow-[0_0_25px_rgba(255,255,255,0.3)] z-20"
+                        : "border-white/20 bg-black/40 hover:border-white/40 hover:bg-white/5 z-0"
+                    }
+                `}
+                >
+                {/* Image */}
+                <div className="h-32 relative">
+                    <Image
+                    src={s.img}
+                    alt={s.name}
+                    fill
+                    className="object-contain p-3"
+                    />
+                </div>
 
+                {/* Info */}
+                <div className="p-3 text-center">
+                    <p className="text-white text-xs tracking-[0.2em]">
+                    {s.name}
+                    </p>
+                    <p className="text-white/50 text-[10px] mt-1">
+                    {s.price}
+                    </p>
+                </div>
+
+                {/* Glow border */}
+                {isActive && (
+                    <div className="absolute inset-0 rounded-lg border border-white/30 pointer-events-none overflow-visible" />
+                )}
+                </div>
+            );
+            })}
+
+        </div>
       </div>
     </div>
   );
