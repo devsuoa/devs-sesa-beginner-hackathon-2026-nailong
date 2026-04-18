@@ -3,7 +3,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Starfield from "./Starfield"
+import { useEffect, useState } from "react";
+import Starfield from "./Starfield";
+import { createClient } from "@/lib/supabase/client";
 
 const NAV_LINKS = [
   { label: "HOME", href: "/" },
@@ -54,11 +56,58 @@ function GoogleIcon() {
   );
 }
 
+type User = {
+  email: string;
+  avatarUrl: string | null;
+  name: string | null;
+};
+
 export default function Navigation() {
   const pathname = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    async function getSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser({
+          email: session.user.email ?? "",
+          avatarUrl: session.user.user_metadata?.avatar_url ?? null,
+          name: session.user.user_metadata?.full_name ?? null,
+        });
+      }
+      setLoading(false);
+    }
+
+    getSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser({
+          email: session.user.email ?? "",
+          avatarUrl: session.user.user_metadata?.avatar_url ?? null,
+          name: session.user.user_metadata?.full_name ?? null,
+        });
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   function handleGoogleLogin() {
-    console.log("Google login triggered");
+    window.location.href = "/api/auth/login";
+  }
+
+  async function handleSignOut() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = "/";
   }
 
   return (
@@ -119,7 +168,7 @@ export default function Navigation() {
         </ul>
 
         {/* Right side */}
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center gap-3">
           {/* Status indicator */}
           <div
             className="flex items-center gap-1.5 text-[9px] text-white/30 tracking-widest pr-4 border-r border-white/8"
@@ -129,16 +178,111 @@ export default function Navigation() {
             <span>SYS ONLINE</span>
           </div>
 
-          {/* Sign in button */}
-          <button type="button" onClick={handleGoogleLogin} className="login-btn">
-            <GoogleIcon />
-            SIGN IN
-          </button>
+          {/* Auth area */}
+          {loading ? (
+            <div className="w-24 h-8 rounded bg-white/5 animate-pulse" />
+          ) : user ? (
+            <UserMenu user={user} onSignOut={handleSignOut} />
+          ) : (
+            <button type="button" onClick={handleGoogleLogin} className="login-btn">
+              <GoogleIcon />
+              SIGN IN
+            </button>
+          )}
         </div>
 
-        {/* Scan line */}
         <div className="scan-line" />
       </nav>
     </>
+  );
+}
+
+function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
+  const [open, setOpen] = useState(false);
+
+  const initials = user.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : user.email[0].toUpperCase();
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-2 cursor-pointer bg-transparent border-none"
+      >
+        {/* Avatar */}
+        {user.avatarUrl ? (
+          <img
+            src={user.avatarUrl}
+            alt={user.name ?? user.email}
+            className="w-8 h-8 rounded-full border border-white/20 object-cover"
+          />
+        ) : (
+          <div
+            className="w-8 h-8 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white text-[11px] font-bold"
+            style={{ fontFamily: "'Orbitron', monospace" }}
+          >
+            {initials}
+          </div>
+        )}
+
+        {/* Name */}
+        <span
+          className="text-[10px] text-white/70 tracking-widest hidden sm:block"
+          style={{ fontFamily: "'Share Tech Mono', monospace" }}
+        >
+          {user.name?.split(" ")[0].toUpperCase() ??
+            user.email.split("@")[0].toUpperCase()}
+        </span>
+
+        {/* Chevron */}
+        <svg
+          className={`w-3 h-3 text-white/40 transition-transform ${open ? "rotate-180" : ""}`}
+          viewBox="0 0 12 12"
+          fill="none"
+        >
+          <path
+            d="M2 4l4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div
+          className="absolute right-0 top-full mt-2 w-48 bg-black/90 border border-white/10 backdrop-blur-xl z-50"
+          style={{
+            clipPath:
+              "polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%)",
+          }}
+        >
+          <div className="px-4 py-3 border-b border-white/8">
+            <p
+              className="text-[10px] text-white/40 tracking-widest truncate"
+              style={{ fontFamily: "'Share Tech Mono', monospace" }}
+            >
+              {user.email}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onSignOut}
+            className="w-full text-left px-4 py-3 text-[10px] text-white/60 tracking-widest hover:text-white hover:bg-white/5 transition-colors cursor-pointer bg-transparent border-none"
+            style={{ fontFamily: "'Orbitron', monospace" }}
+          >
+            SIGN OUT
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
