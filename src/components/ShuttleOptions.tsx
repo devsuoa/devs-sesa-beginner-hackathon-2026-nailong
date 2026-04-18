@@ -19,7 +19,7 @@ const SHUTTLES = [
   {
     id: "nailong",
     name: "Nailong Runner",
-    img: "/shuttleClassic.png",
+    img: "/shuttleNailong.png",
     price: "240 cr",
   },
   {
@@ -79,6 +79,7 @@ export default function ShuttleOptions({ onSelectShuttle }: { onSelectShuttle: (
                     alt={s.name}
                     fill
                     className="object-contain p-3 scale-220"
+                    sizes="(max-width: 220px) 100vw, 220px"
                   />
                 </div>
                 <div className="p-3 text-center">
