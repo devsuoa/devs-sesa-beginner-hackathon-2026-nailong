@@ -25,7 +25,7 @@ export default function Home() {
         <div className="w-1/2 flex flex-col items-center">
 
 			<h1
-				className="mb-6 text-center text-4xl md:text-5xl font-black tracking-[0.15em] text-white animate-[float_6s_ease-in-out_infinite] hover:tracking-[0.25em] transition-all duration-500"
+				className="mb-8 text-center text-4xl md:text-5xl font-black tracking-[0.15em] text-white animate-[float_6s_ease-in-out_infinite] hover:tracking-[0.25em] transition-all duration-500"
 				style={{
 					textShadow:
 					"0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4)",
@@ -34,13 +34,53 @@ export default function Home() {
 				NAILONG EXPRESS
 			</h1>
           
-          <div className="flex items-center justify-center mb-4">
-            Pick Up Planet
-          </div>
+        	{/* Pick Up */}
+			<div className="relative w-full mb-8 flex items-center gap-4">
+			<span className="corner-pip corner-pip--tl" />
+			<span className="corner-pip corner-pip--tr" />
+			<span className="corner-pip corner-pip--bl" />
+			<span className="corner-pip corner-pip--br" />
 
-          <div className="flex items-center justify-center mb-4">
-            Drop Off Planet
-          </div>
+			<label className="w-1/3">
+				PICK UP
+			</label>
+
+			<input
+				type="text"
+				placeholder="Earth 🌍"
+				className="w-2/3 h-12 px-4
+				bg-black/40 border border-white/20
+				text-white placeholder-white/30
+				backdrop-blur-md outline-none
+				tracking-wide
+				transition-all duration-300
+				focus:border-white/60 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(100,200,255,0.5)]"
+			/>
+			</div>
+
+			{/* Drop Off */}
+			<div className="relative w-full mb-8 flex items-center gap-4">
+			<span className="corner-pip corner-pip--tl" />
+			<span className="corner-pip corner-pip--tr" />
+			<span className="corner-pip corner-pip--bl" />
+			<span className="corner-pip corner-pip--br" />
+
+			<label className="w-1/3">
+				DROP OFF
+			</label>
+
+			<input
+				type="text"
+				placeholder="Mars 🔴"
+				className="w-2/3 h-12 px-4
+				bg-black/40 border border-white/20
+				text-white placeholder-white/30
+				backdrop-blur-md outline-none
+				tracking-wide
+				transition-all duration-300
+				focus:border-white/60 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(100,200,255,0.5)]"
+			/>
+			</div>
 
           <button
             className="relative w-full h-16 flex items-center justify-center mb-4
