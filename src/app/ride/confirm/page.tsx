@@ -3,8 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Starfield from "@/components/Starfield";
+import { Suspense } from "react";
 
-// Distance matrix between planets (in light minutes or whatever unit)
+// Distance matrix between planets
 const DISTANCES: Record<string, Record<string, number>> = {
   "Mars 🔴": { "Venus 🟠": 45, "Jupiter 🪐": 350, "Saturn 💫": 650, "Uranus 🌀": 1800, "Neptune 🌊": 2800, "Mercury ☀️": 85 },
   "Venus 🟠": { "Mars 🔴": 45, "Jupiter 🪐": 380, "Saturn 💫": 680, "Uranus 🌀": 1830, "Neptune 🌊": 2830, "Mercury ☀️": 30 },
@@ -24,7 +25,7 @@ const SHUTTLE_DETAILS = {
   void: { name: "Void Phantom", speed: 60, comfort: "Elite" },
 };
 
-export default function ConfirmRide() {
+function ConfirmRideContent() {
   const searchParams = useSearchParams();
   
   const pickup = searchParams.get("pickup") || "";
@@ -38,12 +39,11 @@ export default function ConfirmRide() {
     : 0;
 
   // Calculate additional costs
-  const distanceCost = distance * 2; // 2 cr per unit distance
-  const fuelSurcharge = distanceCost * 0.1; // 10% fuel charge
-  const tax = (basePrice + distanceCost) * 0.05; // 5% tax
+  const distanceCost = distance * 2;
+  const fuelSurcharge = distanceCost * 0.1;
+  const tax = (basePrice + distanceCost) * 0.05;
   
   const totalPrice = basePrice + distanceCost + fuelSurcharge + tax;
-
   const shuttleDetails = SHUTTLE_DETAILS[shuttleId as keyof typeof SHUTTLE_DETAILS];
 
   return (
@@ -63,17 +63,17 @@ export default function ConfirmRide() {
           <div className="space-y-3">
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-white/60">From:</span>
-              <span className="text-white font-semibold">{pickup}</span>
+              <span className="text-white font-semibold">{pickup || "Not selected"}</span>
             </div>
             
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-white/60">To:</span>
-              <span className="text-white font-semibold">{dropoff}</span>
+              <span className="text-white font-semibold">{dropoff || "Not selected"}</span>
             </div>
             
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-white/60">Distance:</span>
-              <span className="text-white font-semibold">{distance.toLocaleString()} million km</span>
+              <span className="text-white font-semibold">{distance ? `${distance.toLocaleString()} million km` : "N/A"}</span>
             </div>
           </div>
         </div>
@@ -85,54 +85,56 @@ export default function ConfirmRide() {
           <div className="space-y-3">
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-white/60">Model:</span>
-              <span className="text-white font-semibold">{shuttleDetails?.name || "Unknown"}</span>
+              <span className="text-white font-semibold">{shuttleDetails?.name || "Not selected"}</span>
             </div>
             
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-white/60">Comfort Class:</span>
-              <span className="text-white font-semibold">{shuttleDetails?.comfort || "Standard"}</span>
+              <span className="text-white font-semibold">{shuttleDetails?.comfort || "N/A"}</span>
             </div>
             
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-white/60">Base Price:</span>
-              <span className="text-white font-semibold">{basePrice} cr</span>
+              <span className="text-white font-semibold">{basePrice ? `${basePrice} cr` : "N/A"}</span>
             </div>
           </div>
         </div>
 
-        {/* Price Breakdown Card */}
-        <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-8">
-          <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">PRICE BREAKDOWN</h2>
-          
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-white/60">Base Shuttle Price:</span>
-              <span className="text-white">{basePrice} cr</span>
-            </div>
+        {/* Price Breakdown Card - Only show if data exists */}
+        {(basePrice > 0 && distance > 0) && (
+          <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-8">
+            <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">PRICE BREAKDOWN</h2>
             
-            <div className="flex justify-between">
-              <span className="text-white/60">Distance Cost ({distance} km @ 2 cr/km):</span>
-              <span className="text-white">{distanceCost} cr</span>
-            </div>
-            
-            <div className="flex justify-between">
-              <span className="text-white/60">Fuel Surcharge (10%):</span>
-              <span className="text-white">{fuelSurcharge.toFixed(2)} cr</span>
-            </div>
-            
-            <div className="flex justify-between">
-              <span className="text-white/60">Tax (5%):</span>
-              <span className="text-white">{tax.toFixed(2)} cr</span>
-            </div>
-            
-            <div className="border-t border-white/20 my-2 pt-2"></div>
-            
-            <div className="flex justify-between text-lg font-bold">
-              <span className="text-white">TOTAL:</span>
-              <span className="text-cyan-400">{totalPrice.toFixed(2)} cr</span>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-white/60">Base Shuttle Price:</span>
+                <span className="text-white">{basePrice} cr</span>
+              </div>
+              
+              <div className="flex justify-between">
+                <span className="text-white/60">Distance Cost ({distance} km @ 2 cr/km):</span>
+                <span className="text-white">{distanceCost} cr</span>
+              </div>
+              
+              <div className="flex justify-between">
+                <span className="text-white/60">Fuel Surcharge (10%):</span>
+                <span className="text-white">{fuelSurcharge.toFixed(2)} cr</span>
+              </div>
+              
+              <div className="flex justify-between">
+                <span className="text-white/60">Tax (5%):</span>
+                <span className="text-white">{tax.toFixed(2)} cr</span>
+              </div>
+              
+              <div className="border-t border-white/20 my-2 pt-2"></div>
+              
+              <div className="flex justify-between text-lg font-bold">
+                <span className="text-white">TOTAL:</span>
+                <span className="text-cyan-400">{totalPrice.toFixed(2)} cr</span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Action Buttons */}
         <div className="flex gap-4">
@@ -159,5 +161,13 @@ export default function ConfirmRide() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConfirmRide() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-white">Loading...</div>}>
+      <ConfirmRideContent />
+    </Suspense>
   );
 }
