@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Starfield from "@/components/Starfield";
 import NailongPlanet from "@/components/NailongPlanet";
 import ShuttleOptions from "@/components/ShuttleOptions";
-import Link from "next/link";
 
 const PLANETS = [
   "Mars 🔴",
@@ -38,12 +37,14 @@ export default function Ride() {
       return;
     }
 
+    console.log("Navigating with:", { pickup, dropoff, selectedShuttle }); // Debug log
+
     // Encode the data and pass via URL
     const params = new URLSearchParams({
-        pickup: pickup,
-        dropoff: dropoff,
-        shuttle: selectedShuttle,
-        price: SHUTTLE_PRICES[selectedShuttle as keyof typeof SHUTTLE_PRICES].toString(),
+      pickup: pickup,
+      dropoff: dropoff,
+      shuttle: selectedShuttle,
+      price: SHUTTLE_PRICES[selectedShuttle as keyof typeof SHUTTLE_PRICES].toString(),
     });
 
     router.push(`/ride/confirm?${params.toString()}`);
@@ -118,9 +119,8 @@ export default function Ride() {
       {/* SHUTTLE OPTIONS */}
       <ShuttleOptions onSelectShuttle={setSelectedShuttle} />
 
-      {/* SUBMIT */}
-      <Link href="/ride/confirm">
-        <button
+      {/* SUBMIT - REMOVED THE Link wrapper */}
+      <button
         onClick={handleConfirm}
         className="relative w-full h-14 flex items-center justify-center
         text-white tracking-[0.25em] text-sm font-semibold
@@ -136,7 +136,6 @@ export default function Ride() {
 
         CONFIRM ROUTE
       </button>
-      </Link>
     </div>
   );
 }
