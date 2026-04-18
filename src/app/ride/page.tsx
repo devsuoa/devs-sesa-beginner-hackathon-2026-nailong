@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/providers/UserProvider";
 import ShuttleOptions from "@/components/ShuttleOptions";
 
 const PLANETS = [
@@ -24,6 +25,7 @@ const SHUTTLE_PRICES = {
 };
 
 export default function Ride() {
+  const { profile } = useUser();
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [selectedShuttle, setSelectedShuttle] = useState<string | null>(null);
@@ -85,8 +87,29 @@ export default function Ride() {
     return PLANETS.filter(planet => planet !== pickup);
   };
 
-  return (
-    <div className="w-full max-w-xl mx-auto flex flex-col gap-8">
+  // Check if user has RIDER role
+  if (profile?.role !== "RIDER") {
+    return (
+      <div className="mt-32 relative z-5 max-w-3xl mx-auto px-8 py-10">
+        <p
+          className="text-[9px] tracking-[0.4em] text-white/25 uppercase mb-2 text-center"
+          style={{ fontFamily: "'Share Tech Mono', monospace" }}
+        >
+          // access denied
+        </p>
+        <p
+          className="text-2xl tracking-[0.2em] text-white/20 uppercase mb-2 text-center"
+          style={{ fontFamily: "'Orbitron', monospace" }}
+        >
+          RIDER ACCESS ONLY
+        </p>
+        <div className="flex justify-center mt-8">
+          <div className="w-16 h-px bg-white/10" />
+        </div>
+      </div>
+    );
+  } else return (
+    <div className="w-full max-w-xl mx-auto flex flex-col gap-8 mt-32">
       {/* TITLE */}
       <h1
         className="text-center text-3xl font-black tracking-[0.2em] text-white mb-2 mt-8"
