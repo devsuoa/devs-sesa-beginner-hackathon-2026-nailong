@@ -3,14 +3,40 @@
 import { useParams, useRouter } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
-import type { Booking } from "@/generated/prisma/client";
+
+// Frontend Booking type that extends the Prisma Booking type
+interface FrontendBooking {
+  id: string;
+  status: string;
+  progress?: number;
+  trackingStatus?: string;
+  eta?: string;
+  rated?: boolean;
+  rating?: number;
+  feedback?: string;
+  completedAt?: string;
+  createdAt?: string;
+  pickup?: string;
+  dropoff?: string;
+  distance?: number;
+  totalPrice?: string;
+  serviceType?: string;
+  driver?: {
+    name: string;
+    id: string;
+    rating: number;
+    rides: number;
+    license: string;
+  };
+  // Add other fields as needed
+}
 
 function TrackingContent() {
   const params = useParams();
   const router = useRouter();
   const bookingId = params.bookingId as string;
   
-  const [booking, setBooking] = useState<Booking | null>(null);
+  const [booking, setBooking] = useState<FrontendBooking | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("CONFIRMING");
@@ -30,7 +56,7 @@ function TrackingContent() {
   useEffect(() => {
     const loadBooking = () => {
       const bookings = JSON.parse(localStorage.getItem('bookings') || '{}');
-      const foundBooking = bookings[bookingId];
+      const foundBooking = bookings[bookingId] as FrontendBooking;
       
       if (foundBooking) {
         setBooking(foundBooking);
@@ -101,7 +127,7 @@ function TrackingContent() {
       clearTimeout(timer9);
       clearTimeout(timer10);
     };
-  }, [booking, loading, bookingId]);
+  }, [booking, loading]);
 
   // Save progress to localStorage
   useEffect(() => {
@@ -186,7 +212,7 @@ function TrackingContent() {
       cargo: "Cargo Hauler",
       class: "Command Class",
     };
-    return booking ? names[booking.serviceType] || "Orbit Classic" : "Unknown";
+    return booking ? names[booking.serviceType || "orbit"] || "Orbit Classic" : "Unknown";
   };
 
   const isActive = booking && booking.status !== 'CANCELLED' && booking.status !== 'COMPLETED' && progress < 100;
@@ -369,7 +395,7 @@ function TrackingContent() {
             <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6">
               <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">DRIVER ASSIGNMENT</h2>
               
-              {driverAssigned ? (
+              {driverAssigned && booking.driver ? (
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="relative">
@@ -382,9 +408,9 @@ function TrackingContent() {
                       <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-black" />
                     </div>
                     <div>
-                      <p className="text-white font-semibold">{booking.driver?.name || "Captain Vega"}</p>
-                      <p className="text-white/40 text-xs tracking-[0.15em]">ID: {booking.driver?.id || "NX-001"}</p>
-                      <p className="text-cyan-400 text-xs">⭐ {booking.driver?.rating || 4.98} • {booking.driver?.rides || 1200} rides</p>
+                      <p className="text-white font-semibold">{booking.driver.name}</p>
+                      <p className="text-white/40 text-xs tracking-[0.15em]">ID: {booking.driver.id}</p>
+                      <p className="text-cyan-400 text-xs">⭐ {booking.driver.rating} • {booking.driver.rides} rides</p>
                     </div>
                   </div>
                   
@@ -395,7 +421,7 @@ function TrackingContent() {
                     </div>
                     <div>
                       <p className="text-white/40 text-[9px] tracking-[0.15em]">LICENSE</p>
-                      <p className="text-white text-sm">{booking.driver?.license || "SPC-0000"}</p>
+                      <p className="text-white text-sm">{booking.driver.license}</p>
                     </div>
                   </div>
                 </div>
@@ -455,22 +481,22 @@ function TrackingContent() {
               <div className="space-y-3">
                 <div className="flex justify-between border-b border-white/10 pb-2">
                   <span className="text-white/60 text-sm">From:</span>
-                  <span className="text-white font-semibold">{booking.pickup}</span>
+                  <span className="text-white font-semibold">{booking.pickup || "Unknown"}</span>
                 </div>
                 <div className="flex justify-between border-b border-white/10 pb-2">
                   <span className="text-white/60 text-sm">To:</span>
-                  <span className="text-white font-semibold">{booking.dropoff}</span>
+                  <span className="text-white font-semibold">{booking.dropoff || "Unknown"}</span>
                 </div>
                 <div className="flex justify-between pt-2">
                   <span className="text-white/60 text-sm">Distance:</span>
-                  <span className="text-cyan-400 font-semibold">{booking.distance} million km</span>
+                  <span className="text-cyan-400 font-semibold">{booking.distance || 0} million km</span>
                 </div>
               </div>
             </div>
           </>
         )}
 
-        {/* Action Buttons - Cancel button always visible for active rides */}
+        {/* Action Buttons */}
         <div className="flex gap-4">
           <Link href="/ride/history" className="flex-1">
             <button className="w-full h-12 flex items-center justify-center
@@ -482,7 +508,6 @@ function TrackingContent() {
             </button>
           </Link>
           
-          {/* Cancel button - show for ALL active rides (including when arriving) */}
           {isActive && (
             <button 
               onClick={() => setShowCancelModal(true)}
