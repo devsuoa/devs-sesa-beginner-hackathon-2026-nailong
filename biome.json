@@ -20,7 +20,9 @@
 			"a11y": {
 				"noStaticElementInteractions": "off",
 				"noLabelWithoutControl": "off",
-				"noSvgWithoutTitle": "off"
+				"noSvgWithoutTitle": "off",
+				"useValidAriaRole": "off",
+				"useKeyWithClickEvents": "off"
 			}
 		}
 	},

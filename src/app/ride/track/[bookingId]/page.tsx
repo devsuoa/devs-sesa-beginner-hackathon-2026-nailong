@@ -3,13 +3,14 @@
 import { useParams, useRouter } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
+import type { Booking } from "@/generated/prisma/client";
 
 function TrackingContent() {
   const params = useParams();
   const router = useRouter();
   const bookingId = params.bookingId as string;
   
-  const [booking, setBooking] = useState<any>(null);
+  const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("CONFIRMING");
@@ -185,7 +186,7 @@ function TrackingContent() {
       cargo: "Cargo Hauler",
       class: "Command Class",
     };
-    return booking ? names[booking.shuttleId] || "Orbit Classic" : "Unknown";
+    return booking ? names[booking.serviceType] || "Orbit Classic" : "Unknown";
   };
 
   const isActive = booking && booking.status !== 'CANCELLED' && booking.status !== 'COMPLETED' && progress < 100;

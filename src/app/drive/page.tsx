@@ -105,7 +105,7 @@ function JobCard({
       onMouseEnter={(e) => {
         if (!leaving) {
           (e.currentTarget as HTMLDivElement).style.borderColor =
-            "rgba(255,255,255,0.2)";
+            "rgba(255,255,255,0.45)";
           (e.currentTarget as HTMLDivElement).style.background =
             "rgba(255,255,255,0.04)";
         }
@@ -148,7 +148,7 @@ function JobCard({
           >
             {job.payout}
           </span>
-          <span className="text-[8px] tracking-[0.2em] text-white/30">
+          <span className="text-[8px] tracking-[0.2em]  text-white/55">
             CREDITS
           </span>
         </div>
@@ -159,7 +159,7 @@ function JobCard({
         <div className="flex items-center gap-2.5">
           <ServiceBadge type={job.serviceType} />
           {job.distance && (
-            <span className="text-[8px] tracking-[0.15em] text-white/25">
+            <span className="text-[8px] tracking-[0.15em] text-white/45">
               {job.distance}
             </span>
           )}
@@ -190,7 +190,7 @@ function JobCard({
             className="absolute inset-0 pointer-events-none"
             style={{
               clipPath: "inherit",
-              border: "1px solid rgba(255,255,255,0.3)",
+              border: "1px solid rgba(255,255,255,0.55)",
               background: "rgba(255,255,255,0.04)",
             }}
           />
@@ -243,7 +243,7 @@ function ToggleButton({
             background: online
               ? "rgba(100,255,180,0.06)"
               : "rgba(255,255,255,0.04)",
-            border: `1px solid ${online ? "rgba(100,255,180,0.4)" : "rgba(255,255,255,0.15)"}`,
+            border: `1px solid ${online ? "rgba(100,255,180,0.4)" : "rgba(255,255,255,0.4)"}`,
             boxShadow: online ? "0 0 20px rgba(100,255,180,0.1) inset" : "none",
           }}
         >
@@ -256,7 +256,7 @@ function ToggleButton({
             strokeWidth="1.5"
             strokeLinecap="round"
             style={{
-              color: online ? "rgba(100,255,180,0.9)" : "rgba(255,255,255,0.3)",
+              color: online ? "rgba(100,255,180,0.9)" : "rgba(255,255,255,0.55)",
               filter: online
                 ? "drop-shadow(0 0 6px rgba(100,255,180,0.8))"
                 : "none",
@@ -282,7 +282,7 @@ function ToggleButton({
         className="text-[9px] tracking-[0.3em] uppercase transition-all duration-400"
         style={{
           fontFamily: "'Share Tech Mono', monospace",
-          color: online ? "rgba(100,255,180,0.5)" : "rgba(255,255,255,0.25)",
+          color: online ? "rgba(100,255,180,0.5)" : "rgba(255,255,255,0.5)",
         }}
       >
         {online ? "YOU ARE LIVE — RECEIVING JOBS" : "TAP TO GO ONLINE"}
@@ -361,7 +361,7 @@ export default function DrivePage() {
     return (
       <div className="mt-32 relative z-5 max-w-3xl mx-auto px-8 py-10">
         <p
-          className="text-96 tracking-[0.4em] text-white/25 uppercase mb-2 text-center"
+          className="text-96 tracking-[0.4em] text-white/45 uppercase mb-2 text-center"
           style={{ fontFamily: "'Share Tech Mono', monospace" }}
         >
           {"// access denied"}
@@ -374,7 +374,7 @@ export default function DrivePage() {
         <div className="mt-32 relative z-5 max-w-3xl mx-auto px-8 py-10">
           {/* Header */}
           <p
-            className="text-[9px] tracking-[0.4em] text-white/25 uppercase mb-2 text-center"
+            className="text-[9px] tracking-[0.4em] text-white/45 uppercase mb-2 text-center"
             style={{ fontFamily: "'Share Tech Mono', monospace" }}
           >
             {"// console"}
@@ -389,7 +389,7 @@ export default function DrivePage() {
             DRIVER DASHBOARD
           </h1>
           <p
-            className="text-[10px] tracking-[0.2em] text-white/30 mb-12 text-center"
+            className="text-[10px] tracking-[0.2em]  text-white/55 mb-12 text-center"
             style={{ fontFamily: "'Share Tech Mono', monospace" }}
           >
             WELCOME BACK, {profile?.firstName?.toUpperCase() || "PILOT"}
@@ -411,14 +411,14 @@ export default function DrivePage() {
           {online ? (
             loadingJobs ? (
               <div
-                className="text-center text-[9px] tracking-[0.3em] text-white/25 py-12"
+                className="text-center text-[9px] tracking-[0.3em] text-white/45 py-12"
                 style={{ fontFamily: "'Share Tech Mono', monospace" }}
               >
                 SCANNING FOR JOBS...
               </div>
             ) : jobs.length === 0 ? (
               <div
-                className="text-center text-[9px] tracking-[0.3em] text-white/20 py-12"
+                className="text-center text-[9px] tracking-[0.3em] text-white/40 py-12"
                 style={{ fontFamily: "'Share Tech Mono', monospace" }}
               >
                 NO JOBS AVAILABLE — STANDING BY
@@ -434,7 +434,7 @@ export default function DrivePage() {
                     LIVE JOBS
                   </span>
                   <span
-                    className="text-[9px] tracking-[0.2em] text-white/25"
+                    className="text-[9px] tracking-[0.2em] text-white/45"
                     style={{ fontFamily: "'Share Tech Mono', monospace" }}
                   >
                     {jobs.length} AVAILABLE
@@ -453,13 +453,13 @@ export default function DrivePage() {
                 className="text-5xl"
                 style={{
                   fontFamily: "'Orbitron', monospace",
-                  color: "rgba(255,255,255,0.15)",
+                  color: "rgba(255,255,255,0.4)",
                 }}
               >
                 ◎
               </div>
               <p
-                className="text-[10px] tracking-[0.25em] text-white/20 text-center"
+                className="text-[10px] tracking-[0.25em] text-white/40 text-center"
                 style={{ fontFamily: "'Share Tech Mono', monospace" }}
               >
                 GO ONLINE TO SEE

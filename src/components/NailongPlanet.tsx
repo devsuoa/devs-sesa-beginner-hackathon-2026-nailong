@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 
 export default function NailongPlanet() {
 	const containerRef = useRef<HTMLDivElement | null>(null);
@@ -33,7 +32,7 @@ export default function NailongPlanet() {
 			nailong.el.style.opacity = "0.8";
 
 			nailong.el.innerHTML = `
-        <img src="/nailongPlanet.png" style="width:100%;height:100%;object-fit:contain;" />
+        <img src="/nailongPlanet.png" style="width:100%;height:100%;object-fit:contain;opacity:0.3;" />
       `;
 
 			container.appendChild(nailong.el);

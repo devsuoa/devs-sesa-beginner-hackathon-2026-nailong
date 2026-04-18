@@ -2,45 +2,72 @@
 @import "tailwindcss";
 
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 @layer base {
   html,
   body {
     @apply bg-black text-white;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Orbitron', monospace !important;
     overflow-x: hidden;
   }
+
+  div {
+    font-family: 'Orbitron', monospace !important;
+  }
+
 }
- 
+
 @keyframes twinkle {
-  0%, 100% { opacity: 0.2; }
-  50%       { opacity: 1;   }
+
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
- 
+
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1;   }
-  50%       { opacity: 0.3; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
 }
- 
+
 @keyframes scan {
-  0%   { background-position: -40% 0; }
-  100% { background-position: 140% 0; }
+  0% {
+    background-position: -40% 0;
+  }
+
+  100% {
+    background-position: 140% 0;
+  }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
 }
 
 @layer components {
- 
+
   /* Nav link — parallelogram shape via clip-path */
   .nav-link {
     position: relative;
@@ -57,7 +84,7 @@
     transition: color 0.25s ease;
     clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
   }
- 
+
   .nav-link::before {
     content: '';
     position: absolute;
@@ -66,30 +93,30 @@
     border: 1px solid transparent;
     transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
   }
- 
+
   .nav-link:hover {
     color: #fff;
-    text-shadow: 0 0 12px rgba(255,255,255,0.9), 0 0 24px rgba(255,255,255,0.5);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 24px rgba(255, 255, 255, 0.5);
   }
- 
+
   .nav-link:hover::before {
     border-color: rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.05);
     box-shadow:
-      0 0 16px rgba(255,255,255,0.15) inset,
-      0 0 16px rgba(255,255,255,0.1);
+      0 0 16px rgba(255, 255, 255, 0.15) inset,
+      0 0 16px rgba(255, 255, 255, 0.1);
   }
- 
+
   .nav-link--active {
     color: #fff;
-    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
   }
- 
+
   .nav-link--active::before {
     border-color: rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.06);
   }
- 
+
   /* Corner pips (reticle dots) */
   .corner-pip {
     position: absolute;
@@ -100,18 +127,33 @@
     transition: opacity 0.25s ease;
     pointer-events: none;
   }
- 
+
   .nav-link:hover .corner-pip,
   .nav-link--active .corner-pip {
     opacity: 1;
-    box-shadow: 0 0 6px rgba(255,255,255,0.9);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
   }
- 
-  .corner-pip--tl { top: -1px;    left:  8px; }
-  .corner-pip--tr { top: -1px;    right: 8px; }
-  .corner-pip--bl { bottom: -1px; left:  8px; }
-  .corner-pip--br { bottom: -1px; right: 8px; }
- 
+
+  .corner-pip--tl {
+    top: -1px;
+    left: 8px;
+  }
+
+  .corner-pip--tr {
+    top: -1px;
+    right: 8px;
+  }
+
+  .corner-pip--bl {
+    bottom: -1px;
+    left: 8px;
+  }
+
+  .corner-pip--br {
+    bottom: -1px;
+    right: 8px;
+  }
+
   /* Login button — arrow-head shape */
   .login-btn {
     position: relative;
@@ -130,9 +172,9 @@
     cursor: pointer;
     clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
     transition: color 0.2s, text-shadow 0.2s;
-    text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
   }
- 
+
   .login-btn::before {
     content: '';
     position: absolute;
@@ -142,20 +184,20 @@
     background: rgba(255, 255, 255, 0.06);
     transition: background 0.2s, box-shadow 0.2s;
   }
- 
+
   .login-btn:hover::before {
     background: rgba(255, 255, 255, 0.1);
     box-shadow:
-      0 0 20px rgba(255,255,255,0.15) inset,
-      0 0 20px rgba(255,255,255,0.1);
+      0 0 20px rgba(255, 255, 255, 0.15) inset,
+      0 0 20px rgba(255, 255, 255, 0.1);
   }
- 
+
   .login-btn:hover {
     text-shadow:
-      0 0 16px rgba(255,255,255,1),
-      0 0 30px rgba(255,255,255,0.6);
+      0 0 16px rgba(255, 255, 255, 1),
+      0 0 30px rgba(255, 255, 255, 0.6);
   }
- 
+
   /* Scanning line at the bottom of the nav */
   .scan-line {
     position: absolute;
@@ -163,25 +205,23 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255,255,255,0.5) 30%,
-      rgba(255,255,255,0.8) 50%,
-      rgba(255,255,255,0.5) 70%,
-      transparent 100%
-    );
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.5) 30%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0.5) 70%,
+        transparent 100%);
     background-size: 40% 100%;
     background-repeat: no-repeat;
     animation: scan 4s ease-in-out infinite;
   }
 }
- 
+
 @layer utilities {
   .animate-pulse-dot {
     animation: pulse-dot 2s infinite;
   }
- 
+
   .animate-twinkle {
     animation: twinkle 3s infinite ease-in-out;
   }

@@ -3,16 +3,29 @@
 import { useRouter } from "next/navigation";
 import RoleSelectModal from "@/components/RoleSelectModal";
 
+type Role = "RIDER" | "DRIVER";
+
 export default function OnboardingPage() {
   const router = useRouter();
 
-  async function handleRoleSelect(role: "rider" | "driver") {
-    await fetch("/api/auth/set-role", {
+  async function handleRoleSelect(roles: Role[]) {
+    const res = await fetch("/api/auth/set-role", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ role }),
+      body: JSON.stringify({ roles }),
     });
-    router.push(role === "driver" ? "/drive" : "/ride");
+
+    if (!res.ok) return;
+
+    // Dual role → go to /ride by default (they can switch to /drive from nav)
+    // Driver only → go to /drive
+    // Rider only → go to /ride
+    const destination =
+      roles.includes("DRIVER") && !roles.includes("RIDER")
+        ? "/drive"
+        : "/ride";
+
+    router.push(destination);
   }
 
   return (
