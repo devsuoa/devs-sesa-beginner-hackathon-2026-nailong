@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 
-// Frontend Booking type that extends the Prisma Booking type
+// Frontend Booking type
 interface FrontendBooking {
   id: string;
   status: string;
@@ -28,7 +28,6 @@ interface FrontendBooking {
     rides: number;
     license: string;
   };
-  // Add other fields as needed
 }
 
 function TrackingContent() {
@@ -62,19 +61,16 @@ function TrackingContent() {
         setBooking(foundBooking);
         setStatus(foundBooking.status);
         
-        // If booking is already cancelled or completed, don't start progress
         if (foundBooking.status === 'CANCELLED' || foundBooking.status === 'COMPLETED') {
           setProgress(foundBooking.status === 'COMPLETED' ? 100 : 0);
           setDriverAssigned(false);
           setLoading(false);
-          // Show rating modal if completed and not yet rated
           if (foundBooking.status === 'COMPLETED' && !foundBooking.rated) {
             setShowRating(true);
           }
           return;
         }
         
-        // If booking has saved progress, restore it
         if (foundBooking.progress) {
           setProgress(foundBooking.progress);
           setStatus(foundBooking.trackingStatus || "EN ROUTE");
@@ -88,7 +84,7 @@ function TrackingContent() {
     loadBooking();
   }, [bookingId]);
   
-  // Simulate booking progress (only if not cancelled/completed)
+  // Simulate booking progress
   useEffect(() => {
     if (!booking || loading) return;
     if (booking.status === 'CANCELLED' || booking.status === 'COMPLETED') return;
@@ -108,7 +104,6 @@ function TrackingContent() {
     const timer8 = setTimeout(() => setProgress(75), 13000);
     const timer9 = setTimeout(() => setProgress(90), 15000);
     
-    // Stop at 95% and wait for user confirmation
     const timer10 = setTimeout(() => {
       setProgress(95);
       setStatus("ARRIVING");
@@ -222,7 +217,7 @@ function TrackingContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-white text-center">
           <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4" />
           <p className="text-white/40 text-xs">LOADING BOOKING DATA...</p>
@@ -233,10 +228,10 @@ function TrackingContent() {
 
   if (!booking) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-white text-center">
           <p className="text-red-400 text-sm">Booking not found</p>
-          <Link href="/ride" className="mt-4 inline-block text-cyan-400 text-sm">
+          <Link href="/ride" className="mt-4 inline-block text-white/60 hover:text-white transition-all">
             Return to booking
           </Link>
         </div>
@@ -245,26 +240,26 @@ function TrackingContent() {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-black">
       <div className="w-full max-w-2xl mx-auto px-4 py-8 relative z-10">
         <h1 className="text-center text-3xl font-black tracking-[0.2em] text-white mb-2"
-          style={{ textShadow: "0 0 20px rgba(255,255,255,0.7)" }}>
+          style={{ textShadow: "0 0 20px rgba(255,255,255,0.5)" }}>
           {isCancelled ? "RIDE CANCELLED" : isCompleted ? "RIDE COMPLETED" : "TRACKING"}
         </h1>
         <p className="text-center text-[9px] tracking-[0.3em] text-white/40 mb-8">
           BOOKING ID: {booking.id}
         </p>
 
-        {/* Arrival Ready Message */}
+        {/* Arrival Ready Message - Colored */}
         {isArriving && !isCompleted && !isCancelled && (
-          <div className="relative rounded-lg border border-green-500/30 bg-green-500/10 backdrop-blur-md p-6 mb-6 animate-pulse">
+          <div className="relative rounded-lg border border-blue-500/50 bg-blue-500/10 backdrop-blur-md p-6 mb-6 animate-pulse shadow-[0_0_30px_rgba(59,130,246,0.3)]">
             <div className="text-center">
               <div className="text-4xl mb-2">📍</div>
-              <p className="text-green-400 text-sm font-semibold">Arriving at destination!</p>
-              <p className="text-white/60 text-xs mt-2">Your driver is approaching your dropoff location</p>
+              <p className="text-blue-400 text-sm font-semibold">Arriving at destination!</p>
+              <p className="text-white/40 text-xs mt-2">Your driver is approaching your dropoff location</p>
               <button
                 onClick={() => setShowArrivalModal(true)}
-                className="mt-4 px-6 py-2 text-sm tracking-[0.2em] text-white bg-green-500/20 border border-green-500/40 hover:bg-green-500/30 transition-all rounded"
+                className="mt-4 px-6 py-2 text-sm tracking-[0.2em] text-white bg-blue-500/20 border border-blue-500/40 hover:bg-blue-500/30 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all rounded"
               >
                 CONFIRM ARRIVAL
               </button>
@@ -274,13 +269,13 @@ function TrackingContent() {
 
         {/* Show cancellation message if cancelled */}
         {isCancelled && (
-          <div className="relative rounded-lg border border-red-500/30 bg-red-500/10 backdrop-blur-md p-6 mb-6">
+          <div className="relative rounded-lg border border-red-500/30 bg-red-500/10 backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(255,0,0,0.1)]">
             <div className="text-center">
               <div className="text-4xl mb-2">✗</div>
               <p className="text-red-400 text-sm font-semibold">This ride has been cancelled</p>
               <p className="text-white/40 text-xs mt-2">You can book a new ride from the dashboard</p>
               <Link href="/ride">
-                <button className="mt-4 px-6 py-2 text-sm tracking-[0.2em] text-white border border-cyan-500/40 hover:border-cyan-400 transition-all">
+                <button className="mt-4 px-6 py-2 text-sm tracking-[0.2em] text-white border border-white/30 hover:border-white/60 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all">
                   BOOK NEW RIDE
                 </button>
               </Link>
@@ -291,8 +286,8 @@ function TrackingContent() {
         {/* Only show tracking content for active rides */}
         {isActive && (
           <>
-            {/* Animated Spacecraft SVG */}
-            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-8 mb-6 overflow-hidden">
+            {/* Animated Spacecraft SVG - with blue accents */}
+            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-8 mb-6 overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)]">
               <div className="absolute inset-0 opacity-10">
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -316,26 +311,26 @@ function TrackingContent() {
                   <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="shuttleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#00d4ff"/>
-                        <stop offset="100%" stopColor="#0099ff"/>
+                        <stop offset="0%" stopColor="#ffffff"/>
+                        <stop offset="100%" stopColor="#3b82f6"/>
                       </linearGradient>
                       <linearGradient id="flameGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#ff6600"/>
-                        <stop offset="50%" stopColor="#ff4400"/>
-                        <stop offset="100%" stopColor="#ff0000" stopOpacity="0"/>
+                        <stop offset="0%" stopColor="#60a5fa"/>
+                        <stop offset="50%" stopColor="#3b82f6"/>
+                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0"/>
                       </linearGradient>
                     </defs>
-                    <path d="M20 30 L80 30 L90 40 L80 50 L20 50 Z" fill="url(#shuttleGrad)" stroke="#00d4ff" strokeWidth="1"/>
-                    <path d="M80 30 L100 40 L80 50 Z" fill="#00d4ff" stroke="#00d4ff" strokeWidth="1"/>
-                    <path d="M20 30 L0 25 L0 35 Z" fill="#0088cc"/>
-                    <path d="M20 50 L0 45 L0 55 Z" fill="#0088cc"/>
-                    <circle cx="70" cy="40" r="5" fill="#1a1a2e" stroke="#00d4ff" strokeWidth="1"/>
+                    <path d="M20 30 L80 30 L90 40 L80 50 L20 50 Z" fill="url(#shuttleGrad)" stroke="#3b82f6" strokeWidth="1"/>
+                    <path d="M80 30 L100 40 L80 50 Z" fill="#3b82f6" stroke="#3b82f6" strokeWidth="1"/>
+                    <path d="M20 30 L0 25 L0 35 Z" fill="#666666"/>
+                    <path d="M20 50 L0 45 L0 55 Z" fill="#666666"/>
+                    <circle cx="70" cy="40" r="5" fill="#1a1a2e" stroke="#3b82f6" strokeWidth="1.5"/>
                     <path d="M15 35 L-10 40 L15 45 Z" fill="url(#flameGrad)">
                       <animate attributeName="d" 
                         values="M15 35 L-10 40 L15 45 Z;M15 33 L-15 40 L15 47 Z;M15 35 L-10 40 L15 45 Z"
                         dur="0.5s" repeatCount="indefinite"/>
                     </path>
-                    <circle cx="15" cy="40" r="8" fill="#ff6600" opacity="0.3">
+                    <circle cx="15" cy="40" r="8" fill="#3b82f6" opacity="0.3">
                       <animate attributeName="r" values="8;12;8" dur="0.5s" repeatCount="indefinite"/>
                       <animate attributeName="opacity" values="0.3;0.1;0.3" dur="0.5s" repeatCount="indefinite"/>
                     </circle>
@@ -343,22 +338,22 @@ function TrackingContent() {
                 </div>
               </div>
               
-              {/* Progress Bar */}
+              {/* Progress Bar - keep original blue gradient */}
               <div className="mt-4">
                 <div className="flex justify-between text-white/40 text-[8px] tracking-[0.15em] mb-2">
-                  <span className={progress >= 0 ? "text-cyan-400" : ""}>DEPARTURE</span>
-                  <span className={progress >= 50 ? "text-cyan-400" : ""}>IN TRANSIT</span>
-                  <span className={progress >= 95 ? "text-green-400" : ""}>ARRIVAL</span>
+                  <span className={progress >= 0 ? "text-white" : ""}>DEPARTURE</span>
+                  <span className={progress >= 50 ? "text-white" : ""}>IN TRANSIT</span>
+                  <span className={progress >= 95 ? "text-blue-400" : ""}>ARRIVAL</span>
                 </div>
                 <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-1000"
+                    className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
                 {progress >= 95 && progress < 100 && (
                   <div className="flex justify-center mt-2">
-                    <span className="text-green-400 text-[8px] tracking-[0.15em] animate-pulse">
+                    <span className="text-blue-400 text-[8px] tracking-[0.15em] animate-pulse">
                       ✓ APPROACHING DESTINATION
                     </span>
                   </div>
@@ -366,19 +361,19 @@ function TrackingContent() {
               </div>
             </div>
 
-            {/* Status Card */}
-            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6">
+            {/* Status Card - Colored based on progress */}
+            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
               <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">BOOKING STATUS</h2>
               
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <div className={`w-3 h-3 rounded-full ${progress >= 95 ? 'bg-green-500' : 'bg-cyan-500'} animate-pulse`} />
-                    <div className={`absolute inset-0 w-3 h-3 rounded-full ${progress >= 95 ? 'bg-green-500' : 'bg-cyan-500'} animate-ping`} />
+                    <div className={`w-3 h-3 rounded-full ${progress >= 95 ? 'bg-blue-400' : 'bg-gray-400'} animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]`} />
+                    <div className={`absolute inset-0 w-3 h-3 rounded-full ${progress >= 95 ? 'bg-blue-400' : 'bg-gray-400'} animate-ping`} />
                   </div>
                   <span className="text-white font-mono text-sm tracking-wider">{status}</span>
                 </div>
-                <span className="text-cyan-400 text-xs">BOOKING #{booking.id}</span>
+                <span className="text-white/60 text-xs">BOOKING #{booking.id}</span>
               </div>
               
               {progress < 95 && (
@@ -392,7 +387,7 @@ function TrackingContent() {
             </div>
 
             {/* Driver Details Card */}
-            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6">
+            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
               <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">DRIVER ASSIGNMENT</h2>
               
               {driverAssigned && booking.driver ? (
@@ -400,17 +395,17 @@ function TrackingContent() {
                   <div className="flex items-center gap-4">
                     <div className="relative">
                       <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="30" cy="30" r="28" fill="#1a1a2e" stroke="#00d4ff" strokeWidth="1.5"/>
-                        <circle cx="30" cy="22" r="8" fill="#00d4ff" opacity="0.8"/>
-                        <path d="M15 45 Q30 35 45 45" fill="none" stroke="#00d4ff" strokeWidth="2"/>
+                        <circle cx="30" cy="30" r="28" fill="#1a1a2e" stroke="#3b82f6" strokeWidth="1.5"/>
+                        <circle cx="30" cy="22" r="8" fill="#3b82f6" opacity="0.8"/>
+                        <path d="M15 45 Q30 35 45 45" fill="none" stroke="#3b82f6" strokeWidth="2"/>
                         <circle cx="30" cy="30" r="2" fill="#fff" opacity="0.5"/>
                       </svg>
-                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-black" />
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-black shadow-[0_0_5px_rgba(0,255,0,0.5)]" />
                     </div>
                     <div>
                       <p className="text-white font-semibold">{booking.driver.name}</p>
                       <p className="text-white/40 text-xs tracking-[0.15em]">ID: {booking.driver.id}</p>
-                      <p className="text-cyan-400 text-xs">⭐ {booking.driver.rating} • {booking.driver.rides} rides</p>
+                      <p className="text-blue-400 text-xs">⭐ {booking.driver.rating} • {booking.driver.rides} rides</p>
                     </div>
                   </div>
                   
@@ -428,25 +423,25 @@ function TrackingContent() {
               ) : (
                 <div className="flex items-center justify-center py-8">
                   <div className="text-center">
-                    <div className="w-8 h-8 border-2 border-white/20 border-t-cyan-500 rounded-full animate-spin mx-auto mb-3" />
+                    <div className="w-8 h-8 border-2 border-white/20 border-t-blue-400 rounded-full animate-spin mx-auto mb-3" />
                     <p className="text-white/40 text-xs tracking-[0.15em]">SCANNING FOR AVAILABLE PILOTS...</p>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* AI Briefing Card */}
-            <div className="relative rounded-lg border border-purple-500/20 bg-gradient-to-r from-purple-500/5 to-blue-500/5 backdrop-blur-md p-6 mb-6">
+            {/* AI Briefing Card - Blue glowing border */}
+            <div className="relative rounded-lg border border-blue-500/30 bg-gradient-to-r from-blue-500/5 to-transparent backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
               <div className="flex items-center gap-2 mb-4">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#00d4ff" opacity="0.6"/>
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#3b82f6" opacity="0.8"/>
                 </svg>
-                <h2 className="text-purple-400/80 text-sm tracking-[0.2em]">AI MISSION BRIEFING</h2>
+                <h2 className="text-blue-400/80 text-sm tracking-[0.2em]">AI MISSION BRIEFING</h2>
               </div>
               
               <div className="space-y-3">
                 <div className="flex gap-3">
-                  <span className="text-cyan-400 text-xs">🚀</span>
+                  <span className="text-blue-400 text-xs">🚀</span>
                   <p className="text-white/70 text-sm leading-relaxed">
                     {progress >= 95 
                       ? "Approaching destination. Prepare for landing sequence."
@@ -455,19 +450,19 @@ function TrackingContent() {
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <span className="text-yellow-400 text-xs">🌡️</span>
+                  <span className="text-white/60 text-xs">🌡️</span>
                   <p className="text-white/70 text-sm leading-relaxed">
                     Space weather: Clear. Solar winds nominal. Safe for transit.
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <span className="text-green-400 text-xs">📡</span>
+                  <span className="text-white/60 text-xs">📡</span>
                   <p className="text-white/70 text-sm leading-relaxed">
                     All systems operational. {getShuttleName()} performing optimally.
                   </p>
                 </div>
-                <div className="mt-3 p-3 rounded bg-white/5 border border-white/10">
-                  <p className="text-cyan-400 text-[10px] tracking-[0.15em]">
+                <div className="mt-3 p-3 rounded bg-blue-500/5 border border-blue-500/20">
+                  <p className="text-blue-400/60 text-[10px] tracking-[0.15em]">
                     🖖 "Live long and prosper, traveler."
                   </p>
                 </div>
@@ -475,7 +470,7 @@ function TrackingContent() {
             </div>
 
             {/* Route Details */}
-            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6">
+            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
               <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">ROUTE DETAILS</h2>
               
               <div className="space-y-3">
@@ -489,7 +484,7 @@ function TrackingContent() {
                 </div>
                 <div className="flex justify-between pt-2">
                   <span className="text-white/60 text-sm">Distance:</span>
-                  <span className="text-cyan-400 font-semibold">{booking.distance || 0} million km</span>
+                  <span className="text-blue-400 font-semibold">{booking.distance || 0} million km</span>
                 </div>
               </div>
             </div>
@@ -503,7 +498,7 @@ function TrackingContent() {
               text-white tracking-[0.2em] text-sm
               border border-white/20 bg-black/40 backdrop-blur-md
               transition-all duration-300
-              hover:border-white/40 hover:bg-white/5">
+              hover:border-white/60 hover:bg-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
               {isActive ? "BACK TO HISTORY" : "VIEW HISTORY"}
             </button>
           </Link>
@@ -513,9 +508,9 @@ function TrackingContent() {
               onClick={() => setShowCancelModal(true)}
               className="flex-1 relative w-full h-12 flex items-center justify-center
                 text-white tracking-[0.2em] text-sm font-semibold
-                border border-red-500/40 bg-gradient-to-r from-red-500/20 to-orange-500/20
+                border border-red-500/40 bg-red-500/10
                 transition-all duration-300
-                hover:border-red-400 hover:shadow-[0_0_25px_rgba(255,0,0,0.4)]
+                hover:border-red-400 hover:bg-red-500/20 hover:shadow-[0_0_20px_rgba(255,0,0,0.2)]
                 active:scale-95">
               CANCEL RIDE
             </button>
@@ -526,8 +521,8 @@ function TrackingContent() {
       {/* Cancel Confirmation Modal */}
       {showCancelModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowCancelModal(false)} />
-          <div className="relative bg-black/90 border border-red-500/30 rounded-lg p-6 max-w-md w-full">
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setShowCancelModal(false)} />
+          <div className="relative bg-black/95 border border-white/20 rounded-lg p-6 max-w-md w-full shadow-[0_0_40px_rgba(255,255,255,0.1)]">
             <div className="text-center">
               <div className="text-5xl mb-4">⚠️</div>
               <h3 className="text-white text-lg font-semibold mb-2">Cancel Ride?</h3>
@@ -537,7 +532,7 @@ function TrackingContent() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowCancelModal(false)}
-                  className="flex-1 h-10 text-white/80 text-sm border border-white/20 hover:border-white/40 transition-all"
+                  className="flex-1 h-10 text-white/80 text-sm border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all"
                 >
                   GO BACK
                 </button>
@@ -554,11 +549,11 @@ function TrackingContent() {
         </div>
       )}
 
-      {/* Arrival Confirmation Modal */}
+      {/* Arrival Confirmation Modal - Colored */}
       {showArrivalModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowArrivalModal(false)} />
-          <div className="relative bg-black/90 border border-green-500/30 rounded-lg p-6 max-w-md w-full">
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setShowArrivalModal(false)} />
+          <div className="relative bg-black/95 border border-blue-500/30 rounded-lg p-6 max-w-md w-full shadow-[0_0_40px_rgba(59,130,246,0.2)]">
             <div className="text-center">
               <div className="text-4xl mb-2">🚀</div>
               <h3 className="text-white text-lg font-semibold mb-2">Welcome to Your Destination!</h3>
@@ -568,14 +563,14 @@ function TrackingContent() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowArrivalModal(false)}
-                  className="flex-1 h-10 text-white/80 text-sm border border-white/20 hover:border-white/40 transition-all"
+                  className="flex-1 h-10 text-white/80 text-sm border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all"
                 >
                   NOT YET
                 </button>
                 <button
                   onClick={handleConfirmArrival}
                   disabled={completing}
-                  className="flex-1 h-10 text-white text-sm font-semibold bg-green-500/20 border border-green-500/40 hover:bg-green-500/30 transition-all disabled:opacity-50"
+                  className="flex-1 h-10 text-white text-sm font-semibold bg-blue-500/20 border border-blue-500/40 hover:bg-blue-500/30 transition-all disabled:opacity-50"
                 >
                   {completing ? "COMPLETING..." : "YES, ARRIVED"}
                 </button>
@@ -588,14 +583,14 @@ function TrackingContent() {
       {/* Rating Modal */}
       {showRating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => !submittingRating && setShowRating(false)} />
-          <div className="relative bg-gradient-to-b from-gray-900 to-black border border-cyan-500/30 rounded-lg p-8 max-w-md w-full animate-in fade-in zoom-in duration-300">
+          <div className="absolute inset-0 bg-black/95 backdrop-blur-md" onClick={() => !submittingRating && setShowRating(false)} />
+          <div className="relative bg-black/95 border border-white/20 rounded-lg p-8 max-w-md w-full shadow-[0_0_50px_rgba(255,255,255,0.1)] animate-in fade-in zoom-in duration-300">
             <div className="text-center">
               <div className="text-6xl mb-4">🌟</div>
               <h2 className="text-2xl font-black tracking-[0.2em] text-white mb-2">
                 THANK YOU!
               </h2>
-              <p className="text-cyan-400 text-sm tracking-[0.15em] mb-4">
+              <p className="text-blue-400 text-sm tracking-[0.15em] mb-4">
                 for choosing NAIX
               </p>
               <p className="text-white/60 text-sm mb-6">
@@ -614,7 +609,7 @@ function TrackingContent() {
                   >
                     <span className={
                       star <= (hoveredRating || rating)
-                        ? "text-yellow-400 drop-shadow-[0_0_10px_rgba(255,255,0,0.5)]"
+                        ? "text-yellow-400 drop-shadow-[0_0_15px_rgba(255,255,0,0.5)]"
                         : "text-gray-600"
                     }>
                       ★
@@ -637,7 +632,7 @@ function TrackingContent() {
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 placeholder="Share your experience with us..."
-                className="w-full h-24 px-4 py-2 bg-black/40 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/30 focus:border-cyan-500/50 focus:outline-none resize-none mb-6"
+                className="w-full h-24 px-4 py-2 bg-black/60 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/30 focus:border-blue-500/50 focus:outline-none resize-none mb-6"
               />
               
               {/* Submit Button */}
@@ -645,14 +640,14 @@ function TrackingContent() {
                 onClick={handleSubmitRating}
                 disabled={submittingRating}
                 className="w-full py-3 text-white tracking-[0.2em] text-sm font-semibold
-                  border border-cyan-500/40 bg-gradient-to-r from-cyan-500/20 to-blue-500/20
-                  transition-all duration-300 hover:border-cyan-400 
-                  hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] active:scale-95
+                  border border-blue-500/40 bg-blue-500/10
+                  transition-all duration-300 hover:border-blue-400 hover:bg-blue-500/20 
+                  hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] active:scale-95
                   disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submittingRating ? (
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-blue-400 rounded-full animate-spin" />
                     SUBMITTING...
                   </div>
                 ) : (
@@ -683,7 +678,7 @@ function TrackingContent() {
 export default function TrackingPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-white text-center">
           <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4" />
           <p className="text-white/40 text-xs">LOADING MISSION DATA...</p>
