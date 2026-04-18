@@ -14,13 +14,13 @@ const PLANETS = [
   "Mercury ☀️",
 ];
 
-// Shuttle prices mapping (should match your Shuttles component)
+// Shuttle prices mapping - UPDATED to match ShuttleOptions IDs
 const SHUTTLE_PRICES = {
-  orbit: 120,
-  nova: 180,
-  nailong: 240,
-  quantum: 380,
-  void: 520,
+  orbit: 120,      // matches "orbit"
+  express: 180,    // matches "express" (not "nova")
+  nailong: 240,    // matches "nailong"
+  cargo: 380,      // matches "cargo" (not "quantum")
+  class: 520,      // matches "class" (not "void")
 };
 
 export default function Ride() {
@@ -29,23 +29,60 @@ export default function Ride() {
   const [selectedShuttle, setSelectedShuttle] = useState<string | null>(null);
   const router = useRouter();
 
+  const handlePickupChange = (value: string) => {
+    setPickup(value);
+    // If dropoff is the same as the new pickup, clear dropoff
+    if (dropoff === value) {
+      setDropoff("");
+    }
+  };
+
+  const handleDropoffChange = (value: string) => {
+    // Prevent setting dropoff same as pickup
+    if (value === pickup) {
+      alert("Pickup and dropoff locations cannot be the same!");
+      return;
+    }
+    setDropoff(value);
+  };
+
   const handleConfirm = () => {
+    // Validate all fields
     if (!pickup || !dropoff || !selectedShuttle) {
       alert("Please fill all fields and select a shuttle");
       return;
     }
 
-    console.log("Navigating with:", { pickup, dropoff, selectedShuttle }); // Debug log
+    if (pickup === dropoff) {
+      alert("Pickup and dropoff locations cannot be the same!");
+      return;
+    }
+
+    // Get the price safely
+    const shuttlePrice = SHUTTLE_PRICES[selectedShuttle as keyof typeof SHUTTLE_PRICES];
+    
+    if (!shuttlePrice) {
+      alert("Invalid shuttle selection. Please select a valid shuttle.");
+      console.error("Invalid shuttle ID:", selectedShuttle);
+      return;
+    }
+
+    console.log("Navigating with:", { pickup, dropoff, selectedShuttle, shuttlePrice });
 
     // Encode the data and pass via URL
     const params = new URLSearchParams({
       pickup: pickup,
       dropoff: dropoff,
       shuttle: selectedShuttle,
-      price: SHUTTLE_PRICES[selectedShuttle as keyof typeof SHUTTLE_PRICES].toString(),
+      price: shuttlePrice.toString(),
     });
 
     router.push(`/ride/confirm?${params.toString()}`);
+  };
+
+  // Filter out the selected pickup from dropoff options
+  const getAvailableDropoffPlanets = () => {
+    return PLANETS.filter(planet => planet !== pickup);
   };
 
   return (
@@ -69,7 +106,7 @@ export default function Ride() {
 
         <select
           value={pickup}
-          onChange={(e) => setPickup(e.target.value)}
+          onChange={(e) => handlePickupChange(e.target.value)}
           className="w-2/3 h-12 px-3 bg-transparent text-white outline-none cursor-pointer"
         >
           <option value="" className="bg-black">Select planet</option>
@@ -94,11 +131,15 @@ export default function Ride() {
 
         <select
           value={dropoff}
-          onChange={(e) => setDropoff(e.target.value)}
+          onChange={(e) => handleDropoffChange(e.target.value)}
           className="w-2/3 h-12 px-3 bg-transparent text-white outline-none cursor-pointer"
+          disabled={!pickup}
+          style={{ opacity: !pickup ? 0.5 : 1 }}
         >
-          <option value="" className="bg-black">Select destination</option>
-          {PLANETS.map((p) => (
+          <option value="" className="bg-black">
+            {!pickup ? "Select pickup first" : "Select destination"}
+          </option>
+          {getAvailableDropoffPlanets().map((p) => (
             <option key={p} value={p} className="bg-black">
               {p}
             </option>
@@ -114,7 +155,7 @@ export default function Ride() {
       {/* SHUTTLE OPTIONS */}
       <ShuttleOptions onSelectShuttle={setSelectedShuttle} />
 
-      {/* SUBMIT - REMOVED THE Link wrapper */}
+      {/* SUBMIT BUTTON */}
       <button
         onClick={handleConfirm}
         className="relative w-full h-14 flex items-center justify-center
