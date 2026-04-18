@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Starfield from "./Starfield";
 import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 
 const NAV_LINKS = [
 	{ label: "HOME", href: "/" },
@@ -126,9 +127,10 @@ export default function Navigation() {
 				}}
 			/>
 
-			<nav className="relative z-10 flex items-center justify-between px-8 h-16 border-b border-white/8 bg-black/60 backdrop-blur-xl">
+			<nav className="fixed top-0 left-0 w-full z-10 flex items-center justify-between px-8 h-16 border-b border-white/8 bg-black/60 backdrop-blur-xl">
 				{/* Logo */}
 				<Link href="/" className="flex items-center gap-2.5 no-underline">
+        <Image src="/favicon.png" alt="Nailong Express Logo" width={64} height={64} />
 					<div>
 						<span
 							className="font-black text-lg tracking-[0.12em] text-white"
