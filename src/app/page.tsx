@@ -91,7 +91,7 @@ export default function Home() {
 						<span className="corner-pip corner-pip--tr" />
 						<span className="corner-pip corner-pip--bl" />
 						<span className="corner-pip corner-pip--br" />
-						Submit
+						SUBMIT
 					</button>
 				</div>
 			</div>
