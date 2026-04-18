@@ -3,7 +3,7 @@
 import { Profile } from "@/generated/prisma/client";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
  
 type UserContextType = {
   user: User | null;
@@ -22,12 +22,12 @@ export default function UserProvider({ children }: { children: React.ReactNode }
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function fetchProfile() {
+  const fetchProfile = useCallback(async () => {
     const res = await fetch("/api/auth/me");
     const data = await res.json();
     setProfile(data.profile ?? null);
-  }
- 
+  }, []);
+  
   useEffect(() => {
     const supabase = createClient();
  
@@ -47,7 +47,7 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     });
  
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchProfile]);
  
   return (
     <UserContext.Provider value={{ user, profile, loading }}>
