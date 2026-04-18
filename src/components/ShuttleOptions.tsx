@@ -11,9 +11,9 @@ const SHUTTLES = [
     price: "120 cr",
   },
   {
-    id: "nova",
-    name: "Nova Cruiser",
-    img: "/shuttleClassic.png",
+    id: "express",
+    name: "Warp Express",
+    img: "/shuttleExpress.png",
     price: "180 cr",
   },
   {
@@ -23,15 +23,15 @@ const SHUTTLES = [
     price: "240 cr",
   },
   {
-    id: "quantum",
-    name: "Quantum X",
-    img: "/shuttleClassic.png",
+    id: "cargo",
+    name: "Cargo Hauler",
+    img: "/shuttleCargo.png",
     price: "380 cr",
   },
   {
-    id: "void",
-    name: "Void Phantom",
-    img: "/shuttleClassic.png",
+    id: "class",
+    name: "Command Class",
+    img: "/shuttleLuxury.png",
     price: "520 cr",
   },
 ];
