@@ -1,6 +1,6 @@
 "use client";
  
-import { Profile } from "@/generated/prisma/client";
+import type { Profile } from "@/generated/prisma/client";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";

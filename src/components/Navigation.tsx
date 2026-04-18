@@ -7,7 +7,8 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
 import { useUser } from "@/providers/UserProvider";
-import { User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
+import { parseUser } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "HOME", href: "/" },
@@ -124,22 +125,17 @@ export default function Navigation() {
 
         {/* Right side */}
         <div className="flex items-center gap-3">
-          {/* Status indicator */}
-          <div
-            className="flex items-center gap-1.5 text-[9px] text-white/30 tracking-widest pr-4 border-r border-white/8"
-            style={{ fontFamily: "'Share Tech Mono', monospace" }}
-          >
-            <div className="w-1.25 h-1.25 rounded-full bg-[rgba(100,255,180,0.9)] animate-pulse-dot shadow-[0_0_6px_rgba(100,255,180,0.8)]" />
-            <span>SYS ONLINE</span>
-          </div>
-
           {/* Auth area */}
           {loading ? (
             <div className="w-24 h-8 rounded bg-white/5 animate-pulse" />
           ) : user ? (
             <UserMenu user={user} onSignOut={handleSignOut} />
           ) : (
-            <button type="button" onClick={handleGoogleLogin} className="login-btn">
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="login-btn"
+            >
               <GoogleIcon />
               SIGN IN
             </button>
@@ -154,20 +150,15 @@ export default function Navigation() {
 
 function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
   const [open, setOpen] = useState(false);
-
-  const parsedUser = {
-    email: user.email ?? "",
-    avatarUrl: user.user_metadata?.avatar_url ?? null,
-    name: user.user_metadata?.full_name ?? null
-  }
+  const parsedUser = parseUser(user);
 
   const initials = parsedUser.name
     ? parsedUser.name
-      .split(" ")
-      .map((n: string) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2)
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
     : parsedUser.email[0].toUpperCase();
 
   return (
@@ -179,10 +170,12 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
       >
         {/* Avatar */}
         {parsedUser.avatarUrl ? (
-          <img
+          <Image
             src={parsedUser.avatarUrl}
             alt={parsedUser.name ?? user.email}
             className="w-8 h-8 rounded-full border border-white/20 object-cover"
+            width={32}
+            height={32}
           />
         ) : (
           <div
@@ -234,10 +227,19 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
               {parsedUser.email}
             </p>
           </div>
+          <Link href="/account">
+            <button
+              type="button"
+              className="w-full text-left px-4 py-3 text-[10px] text-white/60 tracking-widest hover:text-white hover:bg-white/5 transition-colors cursor-pointer bg-transparent border-none"
+              style={{ fontFamily: "'Orbitron', monospace" }}
+            >
+              ACCOUNT
+            </button>
+          </Link>
           <button
             type="button"
             onClick={onSignOut}
-            className="w-full text-left px-4 py-3 text-[10px] text-white/60 tracking-widest hover:text-white hover:bg-white/5 transition-colors cursor-pointer bg-transparent border-none"
+            className="w-full text-left px-4 py-3 text-[10px] tracking-widest text-red-400/70 hover:text-red-400 hover:bg-white/5 transition-colors cursor-pointer bg-transparent border-none"
             style={{ fontFamily: "'Orbitron', monospace" }}
           >
             SIGN OUT

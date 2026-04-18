@@ -36,7 +36,11 @@ const SHUTTLES = [
   },
 ];
 
-export default function ShuttleOptions({ onSelectShuttle }: { onSelectShuttle: (id: string) => void }) {
+export default function ShuttleOptions({
+  onSelectShuttle,
+}: {
+  onSelectShuttle: (id: string) => void;
+}) {
   const [selected, setSelected] = useState<string | null>(null);
 
   const handleSelect = (id: string) => {
@@ -51,8 +55,8 @@ export default function ShuttleOptions({ onSelectShuttle }: { onSelectShuttle: (
       </h2>
 
       <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black via-black/50 to-transparent pointer-events-none z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black via-black/50 to-transparent pointer-events-none z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-12 bg-linear-to-r from-black via-black/50 to-transparent pointer-events-none z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-black via-black/50 to-transparent pointer-events-none z-10" />
 
         <div className="flex gap-4 overflow-x-auto overflow-y-visible pb-3 px-1 pt-4 scrollbar-hide">
           {SHUTTLES.map((s) => {
@@ -63,12 +67,12 @@ export default function ShuttleOptions({ onSelectShuttle }: { onSelectShuttle: (
                 key={s.id}
                 onClick={() => handleSelect(s.id)}
                 className={`
-                  relative min-w-[220px] flex-shrink-0 cursor-pointer
+                  relative min-w-55 shrink-0 cursor-pointer
                   rounded-lg border backdrop-blur-md
                   transition-all duration-300 transform-gpu
                   ${
                     isActive
-                      ? "border-white/70 bg-white/10 scale-105 shadow-[0_0_25px_rgba(255,255,255,0.3)] z-20"
+                      ? "border-white/70 bg-white/10 scale-105 shadow-[0_0_25px_rgba(255,255,255,0.55)] z-20"
                       : "border-white/20 bg-black/40 hover:border-white/40 hover:bg-white/5 z-0"
                   }
                 `}
@@ -80,15 +84,15 @@ export default function ShuttleOptions({ onSelectShuttle }: { onSelectShuttle: (
                     fill
                     className="object-contain p-3 scale-220"
                     sizes="(max-width: 220px) 100vw, 220px"
+                    width={64}
+                    height={64}
                   />
                 </div>
                 <div className="p-3 text-center">
                   <p className="text-white text-xs tracking-[0.2em]">
                     {s.name}
                   </p>
-                  <p className="text-white/50 text-[10px] mt-1">
-                    {s.price}
-                  </p>
+                  <p className="text-white/50 text-[10px] mt-1">{s.price}</p>
                 </div>
                 {isActive && (
                   <div className="absolute inset-0 rounded-lg border border-white/30 pointer-events-none" />

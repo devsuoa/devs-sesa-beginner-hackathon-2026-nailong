@@ -21,7 +21,6 @@ export default function RootLayout({
         <UserProvider>
           <Navigation />
 
-
           <main className="relative z-5">
             <NailongPlanet />
             <Starfield />

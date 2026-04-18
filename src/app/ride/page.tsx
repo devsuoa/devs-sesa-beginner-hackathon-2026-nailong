@@ -92,7 +92,7 @@ export default function Ride() {
         className="text-center text-3xl font-black tracking-[0.2em] text-white mb-2 mt-8"
         style={{
           textShadow:
-            "0 0 20px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.3)",
+            "0 0 20px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.55)",
         }}
       >
         BOOK YOUR RIDE

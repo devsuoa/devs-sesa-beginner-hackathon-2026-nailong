@@ -2,25 +2,32 @@
 
 import { useState } from "react";
 
-type Role = "rider" | "driver";
+type Role = "RIDER" | "DRIVER";
 
 interface RoleSelectModalProps {
-  onSelect: (role: Role) => void;
+  onSelect: (roles: Role[]) => void;
 }
 
 export default function RoleSelectModal({ onSelect }: RoleSelectModalProps) {
-  const [selected, setSelected] = useState<Role | null>(null);
+  const [selected, setSelected] = useState<Set<Role>>(new Set());
   const [loading, setLoading] = useState(false);
 
+  function toggle(role: Role) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(role) ? next.delete(role) : next.add(role);
+      return next;
+    });
+  }
+
   async function handleConfirm() {
-    if (!selected) return;
+    if (selected.size === 0) return;
     setLoading(true);
-    onSelect(selected);
+    onSelect(Array.from(selected));
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      {/* Modal */}
       <div
         className="relative w-full max-w-md mx-4 bg-black border border-white/10 p-8"
         style={{
@@ -35,10 +42,10 @@ export default function RoleSelectModal({ onSelect }: RoleSelectModalProps) {
 
         {/* Header */}
         <p
-          className="text-[9px] tracking-[0.4em] text-white/30 mb-2"
+          className="text-[9px] tracking-[0.4em]  text-white/55 mb-2"
           style={{ fontFamily: "'Share Tech Mono', monospace" }}
         >
-          // IDENTITY PROTOCOL
+          {"// IDENTITY PROTOCOL"}
         </p>
         <h2
           className="text-xl font-black tracking-[0.12em] text-white mb-1"
@@ -50,18 +57,25 @@ export default function RoleSelectModal({ onSelect }: RoleSelectModalProps) {
           WHO ARE YOU?
         </h2>
         <p
-          className="text-[10px] text-white/35 tracking-widest mb-8"
+          className="text-[10px] text-white/55 tracking-widest mb-1"
           style={{ fontFamily: "'Share Tech Mono', monospace" }}
         >
           SELECT YOUR ROLE TO CONTINUE
+        </p>
+        {/* Subtitle hint for multi-select */}
+        <p
+          className="text-[9px] text-white/40 tracking-widest mb-8"
+          style={{ fontFamily: "'Share Tech Mono', monospace" }}
+        >
+          YOU MAY SELECT BOTH
         </p>
 
         {/* Role cards */}
         <div className="grid grid-cols-2 gap-3 mb-8">
           <RoleCard
-            role="rider"
-            selected={selected === "rider"}
-            onClick={() => setSelected("rider")}
+            role="RIDER"
+            selected={selected.has("RIDER")}
+            onClick={() => toggle("RIDER")}
             icon={
               <svg viewBox="0 0 40 40" fill="none" className="w-10 h-10 mx-auto mb-3">
                 <circle cx="20" cy="12" r="5" stroke="white" strokeWidth="1.2" opacity="0.8" />
@@ -74,9 +88,9 @@ export default function RoleSelectModal({ onSelect }: RoleSelectModalProps) {
             description="Book a ride across the cosmos"
           />
           <RoleCard
-            role="driver"
-            selected={selected === "driver"}
-            onClick={() => setSelected("driver")}
+            role="DRIVER"
+            selected={selected.has("DRIVER")}
+            onClick={() => toggle("DRIVER")}
             icon={
               <svg viewBox="0 0 40 40" fill="none" className="w-10 h-10 mx-auto mb-3">
                 <ellipse cx="20" cy="20" rx="12" ry="5" stroke="white" strokeWidth="1.2" opacity="0.8" transform="rotate(-15 20 20)" />
@@ -91,27 +105,38 @@ export default function RoleSelectModal({ onSelect }: RoleSelectModalProps) {
           />
         </div>
 
+        {/* Selected summary */}
+        {selected.size > 0 && (
+          <p
+            className="text-[9px]  text-white/55 tracking-widest text-center mb-4 -mt-4"
+            style={{ fontFamily: "'Share Tech Mono', monospace" }}
+          >
+            {selected.size === 2
+              ? "DUAL ROLE SELECTED"
+              : `${Array.from(selected)[0]} SELECTED`}
+          </p>
+        )}
+
         {/* Confirm button */}
         <button
           type="button"
           onClick={handleConfirm}
-          disabled={!selected || loading}
+          disabled={selected.size === 0 || loading}
           className="relative w-full py-3 font-black text-[11px] tracking-[0.25em] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           style={{
             fontFamily: "'Orbitron', monospace",
             clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)",
-            background: selected ? "rgba(255,255,255,0.08)" : "transparent",
+            background: selected.size > 0 ? "rgba(255,255,255,0.08)" : "transparent",
             border: "none",
-            textShadow: selected ? "0 0 12px rgba(255,255,255,0.8)" : "none",
+            textShadow: selected.size > 0 ? "0 0 12px rgba(255,255,255,0.8)" : "none",
           }}
         >
-          {/* Border overlay */}
           <span
             className="absolute inset-0 pointer-events-none transition-all"
             style={{
               clipPath: "inherit",
-              border: `1px solid ${selected ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.1)"}`,
-              boxShadow: selected ? "0 0 20px rgba(255,255,255,0.1) inset" : "none",
+              border: `1px solid ${selected.size > 0 ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.1)"}`,
+              boxShadow: selected.size > 0 ? "0 0 20px rgba(255,255,255,0.1) inset" : "none",
             }}
           />
           {loading ? "INITIALISING..." : "CONFIRM IDENTITY"}
@@ -122,7 +147,6 @@ export default function RoleSelectModal({ onSelect }: RoleSelectModalProps) {
 }
 
 function RoleCard({
-  role,
   selected,
   onClick,
   icon,
@@ -145,7 +169,6 @@ function RoleCard({
         clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)",
       }}
     >
-      {/* Background + border */}
       <span
         className="absolute inset-0 transition-all pointer-events-none"
         style={{
@@ -157,8 +180,6 @@ function RoleCard({
             : "none",
         }}
       />
-
-      {/* Corner pips when selected */}
       {selected && (
         <>
           <span className="absolute -top-px left-1.5 w-1 h-1 bg-white shadow-[0_0_6px_white]" />
@@ -167,7 +188,6 @@ function RoleCard({
           <span className="absolute -bottom-px right-1.5 w-1 h-1 bg-white shadow-[0_0_6px_white]" />
         </>
       )}
-
       <div
         className="relative"
         style={{
@@ -176,7 +196,6 @@ function RoleCard({
       >
         {icon}
       </div>
-
       <p
         className="text-[11px] font-black tracking-[0.2em] mb-1 transition-all"
         style={{
@@ -191,7 +210,7 @@ function RoleCard({
         className="text-[8px] tracking-wider leading-relaxed"
         style={{
           fontFamily: "'Share Tech Mono', monospace",
-          color: selected ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)",
+          color: selected ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.45)",
         }}
       >
         {description}
