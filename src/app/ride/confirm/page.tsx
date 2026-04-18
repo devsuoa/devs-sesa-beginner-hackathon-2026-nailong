@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -24,8 +24,30 @@ const SHUTTLE_DETAILS = {
   class: { name: "Command Class", speed: 50, comfort: "Premium" },
 };
 
+// Generate a unique booking ID
+function generateBookingId(): string {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `NX-${year}${month}${day}-${random}`;
+}
+
+// Store booking in localStorage (temporary until database is set up)
+function saveBooking(bookingId: string, bookingData: any) {
+  const bookings = JSON.parse(localStorage.getItem('bookings') || '{}');
+  bookings[bookingId] = {
+    ...bookingData,
+    createdAt: new Date().toISOString(),
+    status: 'CONFIRMED'
+  };
+  localStorage.setItem('bookings', JSON.stringify(bookings));
+}
+
 function ConfirmRideContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   
   const pickup = searchParams.get("pickup") || "";
   const dropoff = searchParams.get("dropoff") || "";
@@ -45,9 +67,47 @@ function ConfirmRideContent() {
   const totalPrice = basePrice + distanceCost + fuelSurcharge + tax;
   const shuttleDetails = SHUTTLE_DETAILS[shuttleId as keyof typeof SHUTTLE_DETAILS];
 
+  const handleConfirmRide = () => {
+    // Generate a unique booking ID
+    const bookingId = generateBookingId();
+    
+    // Create booking data
+    const bookingData = {
+      id: bookingId,
+      pickup,
+      dropoff,
+      shuttleId,
+      shuttleName: shuttleDetails?.name,
+      basePrice,
+      distance,
+      distanceCost,
+      fuelSurcharge,
+      tax,
+      totalPrice: totalPrice.toFixed(2),
+      status: "CONFIRMED",
+      createdAt: new Date().toISOString(),
+      eta: "12",
+      driver: {
+        name: "Captain Vega",
+        id: `NX-${Math.floor(Math.random() * 1000)}`,
+        rating: 4.98,
+        rides: 1200,
+        vehicle: shuttleDetails?.name,
+        license: `SPC-${Math.floor(Math.random() * 9000 + 1000)}`
+      }
+    };
+    
+    // Save to localStorage (temporary)
+    saveBooking(bookingId, bookingData);
+    
+    console.log("Booking created:", bookingData);
+    
+    // Redirect to dynamic tracking page with booking ID
+    router.push(`/ride/track/${bookingId}`);
+  };
+
   return (
     <div className="min-h-screen relative">
-     
       <div className="w-full max-w-2xl mx-auto px-4 py-8 relative z-10">
         <h1 className="text-center text-4xl font-black tracking-[0.2em] text-white mb-8"
           style={{ textShadow: "0 0 20px rgba(255,255,255,0.7)" }}>
@@ -98,7 +158,7 @@ function ConfirmRideContent() {
           </div>
         </div>
 
-        {/* Price Breakdown Card - Only show if data exists */}
+        {/* Price Breakdown Card */}
         {(basePrice > 0 && distance > 0) && (
           <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-8">
             <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">PRICE BREAKDOWN</h2>
@@ -136,26 +196,28 @@ function ConfirmRideContent() {
 
         {/* Action Buttons */}
         <div className="flex gap-4">
-          <Link href="/ride" className="flex-1">
-            <button className="w-full h-12 flex items-center justify-center
+          <Link 
+            href="/ride" 
+            className="flex-1 w-full h-12 flex items-center justify-center
               text-white tracking-[0.2em] text-sm
               border border-white/20 bg-black/40 backdrop-blur-md
               transition-all duration-300
-              hover:border-white/40 hover:bg-white/5">
-              BACK
-            </button>
+              hover:border-white/40 hover:bg-white/5"
+          >
+            BACK
           </Link>
           
-          <Link href="/ride/payment" className="flex-1">
-            <button className="relative w-full h-12 flex items-center justify-center
+          <button
+            onClick={handleConfirmRide}
+            className="flex-1 relative w-full h-12 flex items-center justify-center
               text-white tracking-[0.2em] text-sm font-semibold
-              border border-white/40 bg-linear-to-r from-cyan-500/20 to-blue-500/20
+              border border-cyan-500/40 bg-gradient-to-r from-cyan-500/20 to-blue-500/20
               transition-all duration-300
-              hover:border-white/80 hover:shadow-[0_0_25px_rgba(0,255,255,0.4)]
-              active:scale-95">
-              PROCEED TO PAYMENT
-            </button>
-          </Link>
+              hover:border-cyan-400 hover:shadow-[0_0_25px_rgba(0,255,255,0.4)]
+              active:scale-95"
+          >
+            CONFIRM RIDE
+          </button>
         </div>
       </div>
     </div>
