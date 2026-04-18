@@ -1,31 +1,39 @@
 {
-  "name": "devs-sesa-beginner-hackathon-2026-nailong",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@supabase/ssr": "^0.10.2",
-    "@supabase/supabase-js": "^2.103.3",
-    "next": "16.2.4",
-    "postcss": "^8.5.10",
-    "prisma": "^7.7.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "dotenv": "^17.4.2",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+	"name": "devs-sesa-beginner-hackathon-2026-nailong",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write .",
+		"db:generate": "prisma generate"
+	},
+	"dependencies": {
+		"@anthropic-ai/sdk": "^0.90.0",
+		"@prisma/adapter-pg": "^7.7.0",
+		"@prisma/client": "^7.7.0",
+		"@supabase/ssr": "^0.10.2",
+		"@supabase/supabase-js": "^2.103.3",
+		"next": "16.2.4",
+		"pg": "^8.20.0",
+		"postcss": "^8.5.10",
+		"prisma": "^7.7.0",
+		"react": "19.2.4",
+		"react-dom": "19.2.4"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.12",
+		"@tailwindcss/postcss": "^4",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"dotenv": "^17.4.2",
+		"tailwindcss": "^4",
+		"typescript": "^5"
+	}
 }
