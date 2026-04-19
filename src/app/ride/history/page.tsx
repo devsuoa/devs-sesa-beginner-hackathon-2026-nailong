@@ -27,15 +27,13 @@ export default function HistoryPage() {
   const router = useRouter();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>("all"); // all, active, completed, cancelled
+  const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
-    // Load bookings from localStorage
     const loadBookings = () => {
       const allBookings = JSON.parse(localStorage.getItem('bookings') || '{}');
       const bookingsList = Object.values(allBookings) as Booking[];
       
-      // Sort by newest first
       const sorted = bookingsList.sort((a, b) => {
         if (a.createdAt && b.createdAt) {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -49,7 +47,6 @@ export default function HistoryPage() {
     
     loadBookings();
     
-    // Listen for storage events to update in real-time
     const handleStorageChange = () => {
       loadBookings();
     };
@@ -105,9 +102,11 @@ export default function HistoryPage() {
     return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
   };
 
+  const activeBookingsCount = bookings.filter(b => getStatusType(b.status) === 'active').length;
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-white text-center">
           <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4" />
           <p className="text-white/40 text-xs">LOADING HISTORY...</p>
@@ -116,15 +115,15 @@ export default function HistoryPage() {
     );
   }
 
-  // Check if there are ANY bookings at all
   const hasAnyBookings = bookings.length > 0;
+  const hasActiveBookings = activeBookingsCount > 0;
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-black">
       <div className="w-full max-w-4xl mx-auto px-4 py-8 relative z-10">
         {/* Header */}
         <h1 className="text-center text-3xl font-black tracking-[0.2em] text-white mb-2"
-          style={{ textShadow: "0 0 20px rgba(255,255,255,0.7)" }}>
+          style={{ textShadow: "0 0 20px rgba(255,255,255,0.5)" }}>
           RIDE HISTORY
         </h1>
         <p className="text-center text-[9px] tracking-[0.3em] text-white/40 mb-8">
@@ -138,7 +137,7 @@ export default function HistoryPage() {
               onClick={() => setFilter('all')}
               className={`px-4 py-2 text-xs tracking-[0.2em] transition-all duration-300 ${
                 filter === 'all' 
-                  ? 'text-white border-b-2 border-cyan-500' 
+                  ? 'text-white border-b-2 border-white' 
                   : 'text-white/40 hover:text-white/60'
               }`}
             >
@@ -148,11 +147,11 @@ export default function HistoryPage() {
               onClick={() => setFilter('active')}
               className={`px-4 py-2 text-xs tracking-[0.2em] transition-all duration-300 ${
                 filter === 'active' 
-                  ? 'text-cyan-400 border-b-2 border-cyan-500' 
+                  ? 'text-blue-400 border-b-2 border-blue-500' 
                   : 'text-white/40 hover:text-white/60'
               }`}
             >
-              ACTIVE ({bookings.filter(b => getStatusType(b.status) === 'active').length})
+              ACTIVE ({activeBookingsCount})
             </button>
             <button
               onClick={() => setFilter('completed')}
@@ -180,12 +179,24 @@ export default function HistoryPage() {
         {/* Show "Book Your First Ride" only when there are NO bookings at all */}
         {!hasAnyBookings ? (
           <div className="text-center py-16">
-            <div className="text-5xl mb-4 opacity-30">🚀</div>
+            <div className="text-6xl mb-4 opacity-30">🚀</div>
             <p className="text-white/60 text-sm tracking-[0.2em] mb-2">NO RIDES BOOKED YET</p>
             <p className="text-white/30 text-xs tracking-[0.15em] mb-6">Your journey through the stars awaits</p>
             <Link href="/ride">
-              <button className="px-8 py-3 text-sm tracking-[0.2em] text-white border border-cyan-500/40 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:border-cyan-400 hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] transition-all duration-300">
+              <button className="px-8 py-3 text-sm tracking-[0.2em] text-white border border-white/40 bg-white/10 hover:bg-white/20 hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] transition-all duration-300 rounded">
                 BOOK YOUR FIRST RIDE
+              </button>
+            </Link>
+          </div>
+        ) : filter === 'active' && !hasActiveBookings ? (
+          // Show "Order a Naix now!" when on active tab and no active bookings
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4 opacity-30">✨</div>
+            <p className="text-white/60 text-sm tracking-[0.2em] mb-2">NO ACTIVE RIDES</p>
+            <p className="text-white/40 text-xs tracking-[0.15em] mb-6">Ready to explore the stars?</p>
+            <Link href="/ride">
+              <button className="px-8 py-3 text-sm tracking-[0.2em] text-white border border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 hover:shadow-[0_0_25px_rgba(59,130,246,0.3)] transition-all duration-300 rounded">
+                ORDER A NAIX NOW! 🚀
               </button>
             </Link>
           </div>
@@ -198,7 +209,7 @@ export default function HistoryPage() {
             </p>
             <button
               onClick={() => setFilter('all')}
-              className="mt-4 text-cyan-400 text-xs tracking-[0.15em] hover:underline"
+              className="mt-4 text-blue-400 text-xs tracking-[0.15em] hover:underline"
             >
               View all bookings
             </button>
@@ -216,7 +227,7 @@ export default function HistoryPage() {
                   relative rounded-lg border bg-black/40 backdrop-blur-md p-5
                   transition-all duration-300
                   ${isActive 
-                    ? 'border-cyan-500/30 hover:border-cyan-500/60 hover:shadow-[0_0_20px_rgba(0,255,255,0.2)] cursor-pointer' 
+                    ? 'border-blue-500/30 hover:border-blue-500/60 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] cursor-pointer' 
                     : isCompleted
                       ? 'border-green-500/20 opacity-70'
                       : 'border-red-500/20 opacity-60'
@@ -226,7 +237,7 @@ export default function HistoryPage() {
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-white/60 text-[10px] tracking-[0.15em]">#{booking.id}</span>
+                        <span className="text-white/60 text-[10px] tracking-[0.15em]">#{booking.id.slice(-8)}</span>
                         {getStatusBadge(booking.status)}
                       </div>
                       <p className="text-white/40 text-[9px] tracking-[0.15em]">
@@ -243,12 +254,12 @@ export default function HistoryPage() {
                   <div className="mb-3">
                     <div className="flex items-center gap-2 text-sm">
                       <div className="w-2 h-2 rounded-full border border-white/40" />
-                      <span className="text-white/80">{booking.pickup}</span>
+                      <span className="text-white/80">{booking.pickup || "Unknown"}</span>
                     </div>
                     <div className="w-px h-4 bg-white/10 ml-1" />
                     <div className="flex items-center gap-2 text-sm">
                       <div className="w-2 h-2 bg-white/60" style={{ clipPath: "polygon(50% 0,100% 50%,50% 100%,0 50%)" }} />
-                      <span className="text-white/80">{booking.dropoff}</span>
+                      <span className="text-white/80">{booking.dropoff || "Unknown"}</span>
                     </div>
                   </div>
 
@@ -270,7 +281,7 @@ export default function HistoryPage() {
                     
                     {isActive && booking.eta && (
                       <div className="text-right">
-                        <p className="text-cyan-400 text-xs font-semibold">ETA {booking.eta} min</p>
+                        <p className="text-blue-400 text-xs font-semibold">ETA {booking.eta} min</p>
                         <p className="text-white/30 text-[8px]">LIVE</p>
                       </div>
                     )}
@@ -292,8 +303,8 @@ export default function HistoryPage() {
                   {isActive && (
                     <div className="absolute top-3 right-3">
                       <div className="relative">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <div className="absolute inset-0 w-2 h-2 rounded-full bg-green-500 animate-ping" />
+                        <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                        <div className="absolute inset-0 w-2 h-2 rounded-full bg-blue-400 animate-ping" />
                       </div>
                     </div>
                   )}
