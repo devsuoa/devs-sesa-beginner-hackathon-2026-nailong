@@ -193,6 +193,17 @@ function SpacecraftAnimation({ status }: { status: string }) {
   );
 }
 
+// Planet coordinates for the map
+const PLANET_COORDINATES: Record<string, { x: number; y: number; color: string; size: number }> = {
+  "Mars 🔴": { x: 15, y: 45, color: "#e74c3c", size: 12 },
+  "Venus 🟠": { x: 30, y: 30, color: "#f39c12", size: 11 },
+  "Jupiter 🪐": { x: 55, y: 25, color: "#d4a373", size: 18 },
+  "Saturn 💫": { x: 70, y: 35, color: "#e8d5b7", size: 16 },
+  "Uranus 🌀": { x: 80, y: 55, color: "#a8dadc", size: 13 },
+  "Neptune 🌊": { x: 75, y: 70, color: "#457b9d", size: 13 },
+  "Mercury ☀️": { x: 10, y: 60, color: "#e67e22", size: 9 },
+};
+
 function TrackingContent() {
   const params = useParams();
   const router = useRouter();
