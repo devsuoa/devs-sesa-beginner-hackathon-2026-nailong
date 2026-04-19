@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { AuthGate } from "@/components/AuthGate";
@@ -46,7 +46,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
     >
       <p className="text-[9px] tracking-[0.3em] text-white/40 mb-4 uppercase"
         style={{ fontFamily: "'Share Tech Mono', monospace" }}>
-        // {title}
+        {`// ${title}`}
       </p>
       {children}
     </div>
@@ -180,7 +180,7 @@ function TrackingContent() {
   const [feedback, setFeedback] = useState("");
   const [submittingRating, setSubmittingRating] = useState(false);
 
-  async function fetchBooking() {
+  const fetchBooking = useCallback(async () => {
     try {
       const res = await fetch(`/api/bookings/${bookingId}`);
       if (!res.ok) {
@@ -195,14 +195,14 @@ function TrackingContent() {
     } finally {
       setFetchLoading(false);
     }
-  }
+  }, [bookingId]);
 
   useEffect(() => {
     if (authLoading) return;
     fetchBooking();
     const interval = setInterval(fetchBooking, 10000);
     return () => clearInterval(interval);
-  }, [bookingId, authLoading]);
+  }, [authLoading, fetchBooking]);
 
   useEffect(() => {
     if (booking?.status === "DELIVERED") setShowRating(true);
@@ -258,7 +258,7 @@ function TrackingContent() {
           {/* Header */}
           <p className="text-[9px] tracking-[0.4em] text-white/40 uppercase mb-2 text-center"
             style={{ fontFamily: "'Share Tech Mono', monospace" }}>
-            // mission tracking
+            {`// mission tracking`}
           </p>
           <h1 className="text-center text-3xl font-black tracking-[0.12em] text-white mb-2"
             style={{ fontFamily: "'Orbitron', monospace", textShadow: "0 0 20px rgba(255,255,255,0.4)" }}>
@@ -372,7 +372,7 @@ function TrackingContent() {
                   clipPath: "polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))",
                 }}>
                 <p className="text-[9px] tracking-[0.3em] text-white/30 mb-2"
-                  style={{ fontFamily: "'Share Tech Mono', monospace" }}>// confirm abort</p>
+                  style={{ fontFamily: "'Share Tech Mono', monospace" }}>{"// confirm abort"}</p>
                 <h3 className="text-lg font-black tracking-[0.1em] text-white mb-2"
                   style={{ fontFamily: "'Orbitron', monospace" }}>CANCEL RIDE?</h3>
                 <p className="text-[10px] tracking-[0.1em] text-white/40 mb-6"
@@ -410,7 +410,7 @@ function TrackingContent() {
                   clipPath: "polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))",
                 }}>
                 <p className="text-[9px] tracking-[0.4em] text-white/25 mb-3"
-                  style={{ fontFamily: "'Share Tech Mono', monospace" }}>// mission complete</p>
+                  style={{ fontFamily: "'Share Tech Mono', monospace" }}>{"// mission complete"}</p>
                 <h2 className="text-2xl font-black tracking-[0.1em] text-white mb-1"
                   style={{ fontFamily: "'Orbitron', monospace", textShadow: "0 0 20px rgba(255,255,255,0.4)" }}>
                   SAFE LANDING
