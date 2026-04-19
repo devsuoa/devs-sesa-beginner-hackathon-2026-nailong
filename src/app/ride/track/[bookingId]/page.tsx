@@ -30,6 +30,17 @@ interface FrontendBooking {
   };
 }
 
+// Planet coordinates for the map
+const PLANET_COORDINATES: Record<string, { x: number; y: number; color: string; size: number }> = {
+  "Mars 🔴": { x: 15, y: 45, color: "#e74c3c", size: 12 },
+  "Venus 🟠": { x: 30, y: 30, color: "#f39c12", size: 11 },
+  "Jupiter 🪐": { x: 55, y: 25, color: "#d4a373", size: 18 },
+  "Saturn 💫": { x: 70, y: 35, color: "#e8d5b7", size: 16 },
+  "Uranus 🌀": { x: 80, y: 55, color: "#a8dadc", size: 13 },
+  "Neptune 🌊": { x: 75, y: 70, color: "#457b9d", size: 13 },
+  "Mercury ☀️": { x: 10, y: 60, color: "#e67e22", size: 9 },
+};
+
 function TrackingContent() {
   const params = useParams();
   const router = useRouter();
@@ -50,6 +61,11 @@ function TrackingContent() {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [submittingRating, setSubmittingRating] = useState(false);
+  const [rocketPosition, setRocketPosition] = useState({ x: 0, y: 0 });
+  
+  // Get planet coordinates
+  const pickupCoord = booking?.pickup ? PLANET_COORDINATES[booking.pickup] : null;
+  const dropoffCoord = booking?.dropoff ? PLANET_COORDINATES[booking.dropoff] : null;
   
   // Load booking data
   useEffect(() => {
@@ -123,6 +139,16 @@ function TrackingContent() {
       clearTimeout(timer10);
     };
   }, [booking, loading]);
+
+  // Update rocket position based on progress
+  useEffect(() => {
+    if (!pickupCoord || !dropoffCoord) return;
+    
+    const t = progress / 100;
+    const x = pickupCoord.x + (dropoffCoord.x - pickupCoord.x) * t;
+    const y = pickupCoord.y + (dropoffCoord.y - pickupCoord.y) * t;
+    setRocketPosition({ x, y });
+  }, [progress, pickupCoord, dropoffCoord]);
 
   // Save progress to localStorage
   useEffect(() => {
@@ -250,7 +276,7 @@ function TrackingContent() {
           BOOKING ID: {booking.id}
         </p>
 
-        {/* Arrival Ready Message - Colored */}
+        {/* Arrival Ready Message */}
         {isArriving && !isCompleted && !isCancelled && (
           <div className="relative rounded-lg border border-blue-500/50 bg-blue-500/10 backdrop-blur-md p-6 mb-6 animate-pulse shadow-[0_0_30px_rgba(59,130,246,0.3)]">
             <div className="text-center">
@@ -286,82 +312,174 @@ function TrackingContent() {
         {/* Only show tracking content for active rides */}
         {isActive && (
           <>
-            {/* Animated Spacecraft SVG - with blue accents */}
-            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-8 mb-6 overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-              <div className="absolute inset-0 opacity-10">
+            {/* Space Map - Planet to Planet Journey */}
+            <div className="relative rounded-lg border border-white/20 bg-gradient-to-b from-black/80 to-black/40 backdrop-blur-md p-6 mb-6 overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+              <div className="absolute inset-0 opacity-30">
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                   <defs>
-                    <pattern id="stars" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <circle cx="2" cy="2" r="1" fill="white" />
-                      <circle cx="20" cy="15" r="0.5" fill="white" />
-                      <circle cx="35" cy="8" r="0.8" fill="white" />
-                      <circle cx="10" cy="30" r="0.6" fill="white" />
-                      <circle cx="30" cy="35" r="1" fill="white" />
+                    <pattern id="stars2" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                      <circle cx="2" cy="2" r="0.8" fill="white" />
+                      <circle cx="15" cy="10" r="0.5" fill="white" />
+                      <circle cx="25" cy="20" r="0.6" fill="white" />
+                      <circle cx="8" cy="25" r="0.4" fill="white" />
                     </pattern>
                   </defs>
-                  <rect width="100%" height="100%" fill="url(#stars)" />
+                  <rect width="100%" height="100%" fill="url(#stars2)" />
                 </svg>
               </div>
               
-              <div className="relative h-48 flex items-center justify-center">
-                <div 
-                  className="absolute transition-transform duration-1000"
-                  style={{ transform: `translateX(${progress}%)` }}
-                >
-                  <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="shuttleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#ffffff"/>
-                        <stop offset="100%" stopColor="#3b82f6"/>
-                      </linearGradient>
-                      <linearGradient id="flameGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#60a5fa"/>
-                        <stop offset="50%" stopColor="#3b82f6"/>
-                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    <path d="M20 30 L80 30 L90 40 L80 50 L20 50 Z" fill="url(#shuttleGrad)" stroke="#3b82f6" strokeWidth="1"/>
-                    <path d="M80 30 L100 40 L80 50 Z" fill="#3b82f6" stroke="#3b82f6" strokeWidth="1"/>
-                    <path d="M20 30 L0 25 L0 35 Z" fill="#666666"/>
-                    <path d="M20 50 L0 45 L0 55 Z" fill="#666666"/>
-                    <circle cx="70" cy="40" r="5" fill="#1a1a2e" stroke="#3b82f6" strokeWidth="1.5"/>
-                    <path d="M15 35 L-10 40 L15 45 Z" fill="url(#flameGrad)">
-                      <animate attributeName="d" 
-                        values="M15 35 L-10 40 L15 45 Z;M15 33 L-15 40 L15 47 Z;M15 35 L-10 40 L15 45 Z"
-                        dur="0.5s" repeatCount="indefinite"/>
-                    </path>
-                    <circle cx="15" cy="40" r="8" fill="#3b82f6" opacity="0.3">
-                      <animate attributeName="r" values="8;12;8" dur="0.5s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0.3;0.1;0.3" dur="0.5s" repeatCount="indefinite"/>
-                    </circle>
-                  </svg>
-                </div>
-              </div>
+              <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4 text-center">JOURNEY MAP</h2>
               
-              {/* Progress Bar - keep original blue gradient */}
-              <div className="mt-4">
-                <div className="flex justify-between text-white/40 text-[8px] tracking-[0.15em] mb-2">
-                  <span className={progress >= 0 ? "text-white" : ""}>DEPARTURE</span>
-                  <span className={progress >= 50 ? "text-white" : ""}>IN TRANSIT</span>
-                  <span className={progress >= 95 ? "text-blue-400" : ""}>ARRIVAL</span>
-                </div>
-                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-                {progress >= 95 && progress < 100 && (
-                  <div className="flex justify-center mt-2">
-                    <span className="text-blue-400 text-[8px] tracking-[0.15em] animate-pulse">
-                      ✓ APPROACHING DESTINATION
-                    </span>
-                  </div>
+              {/* SVG Map */}
+              <svg viewBox="0 0 100 100" className="w-full h-64">
+                {/* Travel Path */}
+                {pickupCoord && dropoffCoord && (
+                  <>
+                    {/* Path line */}
+                    <line
+                      x1={pickupCoord.x}
+                      y1={pickupCoord.y}
+                      x2={dropoffCoord.x}
+                      y2={dropoffCoord.y}
+                      stroke="rgba(59,130,246,0.3)"
+                      strokeWidth="1.5"
+                      strokeDasharray="2 3"
+                    />
+                    
+                    {/* Animated dash line */}
+                    <line
+                      x1={pickupCoord.x}
+                      y1={pickupCoord.y}
+                      x2={dropoffCoord.x}
+                      y2={dropoffCoord.y}
+                      stroke="rgba(59,130,246,0.6)"
+                      strokeWidth="1.5"
+                      strokeDasharray="4 6"
+                    >
+                      <animate attributeName="stroke-dashoffset" from="10" to="0" dur="1s" repeatCount="indefinite" />
+                    </line>
+                  </>
                 )}
+                
+                {/* Planets */}
+                {Object.entries(PLANET_COORDINATES).map(([name, coord]) => (
+                  <g key={name}>
+                    {/* Glow */}
+                    <circle
+                      cx={coord.x}
+                      cy={coord.y}
+                      r={coord.size + 2}
+                      fill={coord.color}
+                      opacity="0.15"
+                    />
+                    {/* Planet */}
+                    <circle
+                      cx={coord.x}
+                      cy={coord.y}
+                      r={coord.size}
+                      fill={coord.color}
+                      stroke="rgba(255,255,255,0.3)"
+                      strokeWidth="0.5"
+                    />
+                    {/* Planet name label */}
+                    <text
+                      x={coord.x}
+                      y={coord.y - coord.size - 2}
+                      textAnchor="middle"
+                      fill="rgba(255,255,255,0.5)"
+                      fontSize="3"
+                      className="text-[3px]"
+                    >
+                      {name.split(' ')[0]}
+                    </text>
+                    
+                    {/* Pickup marker */}
+                    {booking.pickup === name && (
+                      <circle
+                        cx={coord.x}
+                        cy={coord.y}
+                        r={coord.size + 4}
+                        fill="none"
+                        stroke="#10b981"
+                        strokeWidth="1"
+                      >
+                        <animate attributeName="r" values={`${coord.size + 4};${coord.size + 6}`} dur="1.5s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="1;0" dur="1.5s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    
+                    {/* Dropoff marker */}
+                    {booking.dropoff === name && (
+                      <circle
+                        cx={coord.x}
+                        cy={coord.y}
+                        r={coord.size + 4}
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="1"
+                      >
+                        <animate attributeName="r" values={`${coord.size + 4};${coord.size + 6}`} dur="1.5s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="1;0" dur="1.5s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                  </g>
+                ))}
+                
+                {/* Rocket Ship */}
+                {pickupCoord && dropoffCoord && (
+                  <g
+                    transform={`translate(${rocketPosition.x}, ${rocketPosition.y})`}
+                  >
+                    <g transform="rotate(-45)">
+                      <polygon points="-4,-3 6,0 -4,3" fill="#3b82f6" stroke="white" strokeWidth="0.5"/>
+                      <polygon points="-2,-1.5 4,0 -2,1.5" fill="white" opacity="0.5"/>
+                      <circle cx="-2" cy="0" r="1" fill="#1a1a2e"/>
+                      {/* Engine flame */}
+                      <polygon points="-6,-2 -10,0 -6,2" fill="#60a5fa" opacity="0.8">
+                        <animate attributeName="points" values="-6,-2 -10,0 -6,2;-6,-3 -12,0 -6,3;-6,-2 -10,0 -6,2" dur="0.3s" repeatCount="indefinite" />
+                      </polygon>
+                    </g>
+                  </g>
+                )}
+              </svg>
+              
+              {/* Legend */}
+              <div className="flex justify-center gap-6 mt-4 text-[8px] text-white/40">
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                  <span>Pickup</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                  <span>Dropoff</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-blue-500" style={{ clipPath: "polygon(50% 0,100% 50%,50% 100%,0 50%)" }} />
+                  <span>Current Position</span>
+                </div>
               </div>
             </div>
 
-            {/* Status Card - Colored based on progress */}
+            {/* Progress Bar */}
+            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+              <div className="flex justify-between text-white/60 text-xs mb-2">
+                <span>{booking.pickup}</span>
+                <span>{Math.round(progress)}% Complete</span>
+                <span>{booking.dropoff}</span>
+              </div>
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-white/30 text-[8px] mt-2">
+                <span>Distance: {booking.distance || 0} million km</span>
+                <span>ETA: {eta} min</span>
+              </div>
+            </div>
+
+            {/* Status Card */}
             <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
               <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">BOOKING STATUS</h2>
               
@@ -373,17 +491,8 @@ function TrackingContent() {
                   </div>
                   <span className="text-white font-mono text-sm tracking-wider">{status}</span>
                 </div>
-                <span className="text-white/60 text-xs">BOOKING #{booking.id}</span>
+                <span className="text-white/60 text-xs">BOOKING #{booking.id.slice(-8)}</span>
               </div>
-              
-              {progress < 95 && (
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <div className="flex justify-between text-white/30 text-[8px]">
-                    <span>ETA: {eta} minutes</span>
-                    <span>{Math.floor(progress / 6)} min elapsed</span>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Driver Details Card */}
@@ -430,7 +539,7 @@ function TrackingContent() {
               )}
             </div>
 
-            {/* AI Briefing Card - Blue glowing border */}
+            {/* AI Briefing Card */}
             <div className="relative rounded-lg border border-blue-500/30 bg-gradient-to-r from-blue-500/5 to-transparent backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
               <div className="flex items-center gap-2 mb-4">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -445,8 +554,14 @@ function TrackingContent() {
                   <p className="text-white/70 text-sm leading-relaxed">
                     {progress >= 95 
                       ? "Approaching destination. Prepare for landing sequence."
-                      : `Optimal route calculated. ${Math.ceil((100 - progress) / 6)} minutes to destination.`
+                      : `Traveling from ${booking.pickup} to ${booking.dropoff}. ${Math.ceil((100 - progress) / 6)} minutes remaining.`
                     }
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <span className="text-white/60 text-xs">📊</span>
+                  <p className="text-white/70 text-sm leading-relaxed">
+                    Total distance: {booking.distance} million km. Current progress: {Math.round(progress)}%.
                   </p>
                 </div>
                 <div className="flex gap-3">
@@ -455,36 +570,10 @@ function TrackingContent() {
                     Space weather: Clear. Solar winds nominal. Safe for transit.
                   </p>
                 </div>
-                <div className="flex gap-3">
-                  <span className="text-white/60 text-xs">📡</span>
-                  <p className="text-white/70 text-sm leading-relaxed">
-                    All systems operational. {getShuttleName()} performing optimally.
-                  </p>
-                </div>
                 <div className="mt-3 p-3 rounded bg-blue-500/5 border border-blue-500/20">
                   <p className="text-blue-400/60 text-[10px] tracking-[0.15em]">
                     🖖 "Live long and prosper, traveler."
                   </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Route Details */}
-            <div className="relative rounded-lg border border-white/20 bg-black/40 backdrop-blur-md p-6 mb-6 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-              <h2 className="text-white/80 text-sm tracking-[0.2em] mb-4">ROUTE DETAILS</h2>
-              
-              <div className="space-y-3">
-                <div className="flex justify-between border-b border-white/10 pb-2">
-                  <span className="text-white/60 text-sm">From:</span>
-                  <span className="text-white font-semibold">{booking.pickup || "Unknown"}</span>
-                </div>
-                <div className="flex justify-between border-b border-white/10 pb-2">
-                  <span className="text-white/60 text-sm">To:</span>
-                  <span className="text-white font-semibold">{booking.dropoff || "Unknown"}</span>
-                </div>
-                <div className="flex justify-between pt-2">
-                  <span className="text-white/60 text-sm">Distance:</span>
-                  <span className="text-blue-400 font-semibold">{booking.distance || 0} million km</span>
                 </div>
               </div>
             </div>
@@ -549,16 +638,16 @@ function TrackingContent() {
         </div>
       )}
 
-      {/* Arrival Confirmation Modal - Colored */}
+      {/* Arrival Confirmation Modal */}
       {showArrivalModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setShowArrivalModal(false)} />
           <div className="relative bg-black/95 border border-blue-500/30 rounded-lg p-6 max-w-md w-full shadow-[0_0_40px_rgba(59,130,246,0.2)]">
             <div className="text-center">
               <div className="text-4xl mb-2">🚀</div>
-              <h3 className="text-white text-lg font-semibold mb-2">Welcome to Your Destination!</h3>
+              <h3 className="text-white text-lg font-semibold mb-2">Welcome to {booking.dropoff}!</h3>
               <p className="text-white/60 text-sm mb-6">
-                Have you arrived safely? Confirm to complete your journey with NAIX.
+                Have you arrived safely at {booking.dropoff}? Confirm to complete your journey with NAIX.
               </p>
               <div className="flex gap-3">
                 <button
@@ -594,7 +683,7 @@ function TrackingContent() {
                 for choosing NAIX
               </p>
               <p className="text-white/60 text-sm mb-6">
-                How was your ride with {booking.driver?.name || "Captain Vega"}?
+                How was your ride from {booking.pickup} to {booking.dropoff} with {booking.driver?.name || "Captain Vega"}?
               </p>
               
               {/* Star Rating */}
