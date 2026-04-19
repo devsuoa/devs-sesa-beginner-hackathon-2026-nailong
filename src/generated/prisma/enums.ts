@@ -35,15 +35,6 @@ export const VesselType = {
 export type VesselType = (typeof VesselType)[keyof typeof VesselType]
 
 
-export const LocationType = {
-  STATION: 'STATION',
-  COLONY: 'COLONY',
-  OUTPOST: 'OUTPOST'
-} as const
-
-export type LocationType = (typeof LocationType)[keyof typeof LocationType]
-
-
 export const ServiceType = {
   SHUTTLE: 'SHUTTLE',
   CARGO: 'CARGO',

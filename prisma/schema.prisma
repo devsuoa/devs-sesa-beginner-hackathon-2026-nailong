@@ -71,12 +71,12 @@ model DriverProfile {
 model Location {
   id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name              String       // "Station Kepler-7"
-  type              LocationType
   description       String?
   currentConditions String?      // "dust storm", "clear", "solar flare warning"
   travelTimes       Json         @default("{}") // { "<locationId>": minutesInt }
   isActive          Boolean      @default(true)
   createdAt         DateTime     @default(now())
+
 
   riderHomeLocations  RiderProfile[]
   originBookings      Booking[]    @relation("OriginBookings")
@@ -163,14 +163,6 @@ enum VesselType {
   COURIER       // food/small deliveries
 
   @@map("vessel_type")
-}
-
-enum LocationType {
-  STATION
-  COLONY
-  OUTPOST
-
-  @@map("location_type")
 }
 
 enum ServiceType {

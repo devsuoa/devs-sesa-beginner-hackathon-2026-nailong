@@ -299,18 +299,28 @@ export default function DrivePage() {
   const [loadingJobs, setLoadingJobs] = useState(false);
   const [toast, setToast] = useState(false);
 
-  const fetchJobs = useCallback(async () => {
-    setLoadingJobs(true);
-    try {
-      const res = await fetch("/api/bookings/available");
-      const data = (await res.json()).bookings;
-      setJobs(data);
-    } catch (err) {
-      console.error("Failed to fetch jobs:", err);
-    } finally {
-      setLoadingJobs(false);
-    }
-  }, []);
+const fetchJobs = useCallback(async () => {
+  setLoadingJobs(true);
+  try {
+    const res = await fetch("/api/bookings/available");
+    const data = await res.json();
+    
+    // Map the API response to the Job shape the UI expects
+    const mapped = data.bookings.map((b: any) => ({
+      id: b.id,
+      origin: b.origin.name,           // ← extract .name from the object
+      destination: b.destination.name, // ← extract .name from the object
+      payout: b.priceCredits,
+      serviceType: b.serviceType,
+    }));
+    
+    setJobs(mapped);
+  } catch (err) {
+    console.error("Failed to fetch jobs:", err);
+  } finally {
+    setLoadingJobs(false);
+  }
+}, []);
 
   async function handleToggle() {
     setToggling(true);
@@ -392,7 +402,7 @@ export default function DrivePage() {
             className="text-[10px] tracking-[0.2em]  text-white/55 mb-12 text-center"
             style={{ fontFamily: "'Share Tech Mono', monospace" }}
           >
-            WELCOME BACK, {profile?.firstName?.toUpperCase() || "PILOT"}
+            WELCOME BACK, {profile?.displayName.toUpperCase() || "PILOT"}
           </p>
 
           {/* Toggle */}

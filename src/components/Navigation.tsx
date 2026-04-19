@@ -7,13 +7,11 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
 import { useUser } from "@/providers/UserProvider";
-import type { User } from "@supabase/supabase-js";
-import { type ParsedUser, parseUser } from "@/lib/utils";
+import { type ParsedUser } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "HOME", href: "/" },
   { label: "BOOK", href: "/book" },
-  { label: "TRACK", href: "/track" },
   { label: "ORDERS", href: "/orders" },
 ];
 

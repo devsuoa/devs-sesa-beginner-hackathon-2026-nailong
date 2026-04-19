@@ -23,6 +23,9 @@
 				"noSvgWithoutTitle": "off",
 				"useValidAriaRole": "off",
 				"useKeyWithClickEvents": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off"
 			}
 		}
 	},

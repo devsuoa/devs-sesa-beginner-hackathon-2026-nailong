@@ -932,7 +932,6 @@ export type DriverProfileScalarFieldEnum = (typeof DriverProfileScalarFieldEnum)
 export const LocationScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  type: 'type',
   description: 'description',
   currentConditions: 'currentConditions',
   travelTimes: 'travelTimes',
@@ -1118,20 +1117,6 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-/**
- * Reference to a field of type 'LocationType'
- */
-export type EnumLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LocationType'>
-    
-
-
-/**
- * Reference to a field of type 'LocationType[]'
- */
-export type ListEnumLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LocationType[]'>
     
 
 

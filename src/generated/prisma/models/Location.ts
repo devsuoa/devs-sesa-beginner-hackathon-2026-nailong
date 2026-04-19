@@ -27,7 +27,6 @@ export type AggregateLocation = {
 export type LocationMinAggregateOutputType = {
   id: string | null
   name: string | null
-  type: $Enums.LocationType | null
   description: string | null
   currentConditions: string | null
   isActive: boolean | null
@@ -37,7 +36,6 @@ export type LocationMinAggregateOutputType = {
 export type LocationMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  type: $Enums.LocationType | null
   description: string | null
   currentConditions: string | null
   isActive: boolean | null
@@ -47,7 +45,6 @@ export type LocationMaxAggregateOutputType = {
 export type LocationCountAggregateOutputType = {
   id: number
   name: number
-  type: number
   description: number
   currentConditions: number
   travelTimes: number
@@ -60,7 +57,6 @@ export type LocationCountAggregateOutputType = {
 export type LocationMinAggregateInputType = {
   id?: true
   name?: true
-  type?: true
   description?: true
   currentConditions?: true
   isActive?: true
@@ -70,7 +66,6 @@ export type LocationMinAggregateInputType = {
 export type LocationMaxAggregateInputType = {
   id?: true
   name?: true
-  type?: true
   description?: true
   currentConditions?: true
   isActive?: true
@@ -80,7 +75,6 @@ export type LocationMaxAggregateInputType = {
 export type LocationCountAggregateInputType = {
   id?: true
   name?: true
-  type?: true
   description?: true
   currentConditions?: true
   travelTimes?: true
@@ -164,7 +158,6 @@ export type LocationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type LocationGroupByOutputType = {
   id: string
   name: string
-  type: $Enums.LocationType
   description: string | null
   currentConditions: string | null
   travelTimes: runtime.JsonValue
@@ -196,7 +189,6 @@ export type LocationWhereInput = {
   NOT?: Prisma.LocationWhereInput | Prisma.LocationWhereInput[]
   id?: Prisma.UuidFilter<"Location"> | string
   name?: Prisma.StringFilter<"Location"> | string
-  type?: Prisma.EnumLocationTypeFilter<"Location"> | $Enums.LocationType
   description?: Prisma.StringNullableFilter<"Location"> | string | null
   currentConditions?: Prisma.StringNullableFilter<"Location"> | string | null
   travelTimes?: Prisma.JsonFilter<"Location">
@@ -210,7 +202,6 @@ export type LocationWhereInput = {
 export type LocationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   currentConditions?: Prisma.SortOrderInput | Prisma.SortOrder
   travelTimes?: Prisma.SortOrder
@@ -227,7 +218,6 @@ export type LocationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LocationWhereInput[]
   NOT?: Prisma.LocationWhereInput | Prisma.LocationWhereInput[]
   name?: Prisma.StringFilter<"Location"> | string
-  type?: Prisma.EnumLocationTypeFilter<"Location"> | $Enums.LocationType
   description?: Prisma.StringNullableFilter<"Location"> | string | null
   currentConditions?: Prisma.StringNullableFilter<"Location"> | string | null
   travelTimes?: Prisma.JsonFilter<"Location">
@@ -241,7 +231,6 @@ export type LocationWhereUniqueInput = Prisma.AtLeast<{
 export type LocationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   currentConditions?: Prisma.SortOrderInput | Prisma.SortOrder
   travelTimes?: Prisma.SortOrder
@@ -258,7 +247,6 @@ export type LocationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LocationScalarWhereWithAggregatesInput | Prisma.LocationScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Location"> | string
   name?: Prisma.StringWithAggregatesFilter<"Location"> | string
-  type?: Prisma.EnumLocationTypeWithAggregatesFilter<"Location"> | $Enums.LocationType
   description?: Prisma.StringNullableWithAggregatesFilter<"Location"> | string | null
   currentConditions?: Prisma.StringNullableWithAggregatesFilter<"Location"> | string | null
   travelTimes?: Prisma.JsonWithAggregatesFilter<"Location">
@@ -269,7 +257,6 @@ export type LocationScalarWhereWithAggregatesInput = {
 export type LocationCreateInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -283,7 +270,6 @@ export type LocationCreateInput = {
 export type LocationUncheckedCreateInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -297,7 +283,6 @@ export type LocationUncheckedCreateInput = {
 export type LocationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -311,7 +296,6 @@ export type LocationUpdateInput = {
 export type LocationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -325,7 +309,6 @@ export type LocationUncheckedUpdateInput = {
 export type LocationCreateManyInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -336,7 +319,6 @@ export type LocationCreateManyInput = {
 export type LocationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -347,7 +329,6 @@ export type LocationUpdateManyMutationInput = {
 export type LocationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -363,7 +344,6 @@ export type LocationNullableScalarRelationFilter = {
 export type LocationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   description?: Prisma.SortOrder
   currentConditions?: Prisma.SortOrder
   travelTimes?: Prisma.SortOrder
@@ -374,7 +354,6 @@ export type LocationCountOrderByAggregateInput = {
 export type LocationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   description?: Prisma.SortOrder
   currentConditions?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -384,7 +363,6 @@ export type LocationMaxOrderByAggregateInput = {
 export type LocationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   description?: Prisma.SortOrder
   currentConditions?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -410,10 +388,6 @@ export type LocationUpdateOneWithoutRiderHomeLocationsNestedInput = {
   delete?: Prisma.LocationWhereInput | boolean
   connect?: Prisma.LocationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutRiderHomeLocationsInput, Prisma.LocationUpdateWithoutRiderHomeLocationsInput>, Prisma.LocationUncheckedUpdateWithoutRiderHomeLocationsInput>
-}
-
-export type EnumLocationTypeFieldUpdateOperationsInput = {
-  set?: $Enums.LocationType
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -451,7 +425,6 @@ export type LocationUpdateOneRequiredWithoutDestinationBookingsNestedInput = {
 export type LocationCreateWithoutRiderHomeLocationsInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -464,7 +437,6 @@ export type LocationCreateWithoutRiderHomeLocationsInput = {
 export type LocationUncheckedCreateWithoutRiderHomeLocationsInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -493,7 +465,6 @@ export type LocationUpdateToOneWithWhereWithoutRiderHomeLocationsInput = {
 export type LocationUpdateWithoutRiderHomeLocationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -506,7 +477,6 @@ export type LocationUpdateWithoutRiderHomeLocationsInput = {
 export type LocationUncheckedUpdateWithoutRiderHomeLocationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -519,7 +489,6 @@ export type LocationUncheckedUpdateWithoutRiderHomeLocationsInput = {
 export type LocationCreateWithoutOriginBookingsInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -532,7 +501,6 @@ export type LocationCreateWithoutOriginBookingsInput = {
 export type LocationUncheckedCreateWithoutOriginBookingsInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -550,7 +518,6 @@ export type LocationCreateOrConnectWithoutOriginBookingsInput = {
 export type LocationCreateWithoutDestinationBookingsInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -563,7 +530,6 @@ export type LocationCreateWithoutDestinationBookingsInput = {
 export type LocationUncheckedCreateWithoutDestinationBookingsInput = {
   id?: string
   name: string
-  type: $Enums.LocationType
   description?: string | null
   currentConditions?: string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -592,7 +558,6 @@ export type LocationUpdateToOneWithWhereWithoutOriginBookingsInput = {
 export type LocationUpdateWithoutOriginBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -605,7 +570,6 @@ export type LocationUpdateWithoutOriginBookingsInput = {
 export type LocationUncheckedUpdateWithoutOriginBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -629,7 +593,6 @@ export type LocationUpdateToOneWithWhereWithoutDestinationBookingsInput = {
 export type LocationUpdateWithoutDestinationBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -642,7 +605,6 @@ export type LocationUpdateWithoutDestinationBookingsInput = {
 export type LocationUncheckedUpdateWithoutDestinationBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelTimes?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -704,7 +666,6 @@ export type LocationCountOutputTypeCountDestinationBookingsArgs<ExtArgs extends 
 export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  type?: boolean
   description?: boolean
   currentConditions?: boolean
   travelTimes?: boolean
@@ -719,7 +680,6 @@ export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type LocationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  type?: boolean
   description?: boolean
   currentConditions?: boolean
   travelTimes?: boolean
@@ -730,7 +690,6 @@ export type LocationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type LocationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  type?: boolean
   description?: boolean
   currentConditions?: boolean
   travelTimes?: boolean
@@ -741,7 +700,6 @@ export type LocationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type LocationSelectScalar = {
   id?: boolean
   name?: boolean
-  type?: boolean
   description?: boolean
   currentConditions?: boolean
   travelTimes?: boolean
@@ -749,7 +707,7 @@ export type LocationSelectScalar = {
   createdAt?: boolean
 }
 
-export type LocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "description" | "currentConditions" | "travelTimes" | "isActive" | "createdAt", ExtArgs["result"]["location"]>
+export type LocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "currentConditions" | "travelTimes" | "isActive" | "createdAt", ExtArgs["result"]["location"]>
 export type LocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   riderHomeLocations?: boolean | Prisma.Location$riderHomeLocationsArgs<ExtArgs>
   originBookings?: boolean | Prisma.Location$originBookingsArgs<ExtArgs>
@@ -769,7 +727,6 @@ export type $LocationPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    type: $Enums.LocationType
     description: string | null
     currentConditions: string | null
     travelTimes: runtime.JsonValue
@@ -1203,7 +1160,6 @@ export interface Prisma__LocationClient<T, Null = never, ExtArgs extends runtime
 export interface LocationFieldRefs {
   readonly id: Prisma.FieldRef<"Location", 'String'>
   readonly name: Prisma.FieldRef<"Location", 'String'>
-  readonly type: Prisma.FieldRef<"Location", 'LocationType'>
   readonly description: Prisma.FieldRef<"Location", 'String'>
   readonly currentConditions: Prisma.FieldRef<"Location", 'String'>
   readonly travelTimes: Prisma.FieldRef<"Location", 'Json'>

@@ -115,7 +115,6 @@ export type DriverProfileScalarFieldEnum = (typeof DriverProfileScalarFieldEnum)
 export const LocationScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  type: 'type',
   description: 'description',
   currentConditions: 'currentConditions',
   travelTimes: 'travelTimes',

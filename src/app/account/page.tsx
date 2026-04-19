@@ -141,7 +141,7 @@ export default function AccountPage() {
     const res = await fetch("/api/auth/me", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, isRider, isDriver }),
+      body: JSON.stringify({ displayName: name, isRider, isDriver }),
     });
     setSaving(false);
 
@@ -182,7 +182,7 @@ export default function AccountPage() {
       {/* Toast */}
       {toast && (
         <div
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-3 text-[10px] tracking-[0.2em]"
+          className="fixed top-42 right-64 -translate-x-1/2 z-64 px-5 py-3 text-[10px] tracking-[0.2em]"
           style={{
             fontFamily: "'Share Tech Mono', monospace",
             clipPath: "polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%)",
